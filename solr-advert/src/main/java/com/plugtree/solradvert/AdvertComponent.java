@@ -6,19 +6,32 @@
 package com.plugtree.solradvert;
 
 import java.io.IOException;
+import org.apache.solr.common.params.CommonParams;
 import org.apache.solr.common.params.SolrParams;
 import org.apache.solr.handler.component.ResponseBuilder;
 import org.apache.solr.handler.component.SearchComponent;
+import org.drools.KnowledgeBase;
+import org.drools.runtime.StatefulKnowledgeSession;
 
 /**
  *
  * @author salaboy
  */
 public class AdvertComponent extends SearchComponent {
-
+    
+    
     @Override
     public void prepare(ResponseBuilder rb) throws IOException {
         SolrParams params = rb.req.getParams();
+        String q = params.get(CommonParams.Q);
+        
+        
+        StatefulKnowledgeSession ksession = DroolsService.getInstance().getKnowledgeSession("advert");
+        ksession.insert(q);
+        
+        
+        
+        
     }
 
     @Override
