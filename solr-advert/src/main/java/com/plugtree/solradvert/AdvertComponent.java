@@ -8,6 +8,8 @@ package com.plugtree.solradvert;
 import java.io.IOException;
 
 import org.apache.solr.common.params.CommonParams;
+import org.apache.solr.common.params.DisMaxParams;
+import org.apache.solr.common.params.ModifiableSolrParams;
 import org.apache.solr.common.params.SolrParams;
 import org.apache.solr.handler.component.ResponseBuilder;
 import org.apache.solr.handler.component.SearchComponent;
@@ -27,16 +29,18 @@ public class AdvertComponent extends SearchComponent {
     public void prepare(ResponseBuilder rb) throws IOException {
     	logger.debug("Preparing Advert Component...");
     	
-        SolrParams params = rb.req.getParams();
-        String q = params.get(CommonParams.Q);
+    	ModifiableSolrParams modifiableParams = new ModifiableSolrParams(rb.req.getParams());
+    	
+        String q = modifiableParams.get(CommonParams.Q);
         
         
-        StatefulKnowledgeSession ksession = DroolsService.getInstance().getKnowledgeSession("advert");
-        ksession.insert(q);
+//        StatefulKnowledgeSession ksession = DroolsService.getInstance().getKnowledgeSession("advert");
+//        ksession.insert(q);
         
+        //boosting those documents created by 'user2'
+        modifiableParams.set(DisMaxParams.BQ, "(author:user2)^2");
         
-        
-        
+        rb.req.setParams(modifiableParams);
     }
 
     @Override

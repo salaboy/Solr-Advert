@@ -236,6 +236,10 @@
 
 
   </query>
+  
+  	<requestHandler name="standard" class="solr.StandardRequestHandler">
+	</requestHandler>
+  
 
 
   <!-- An alternate set representation that uses an integer hash to store filters (sets of docids).
@@ -248,11 +252,22 @@
       The "standard" request handler is the default and will be used if qt
      is not specified in the request.
   -->
-  <requestHandler name="standard" class="solr.StandardRequestHandler">
-  	 <arr name="first-components">
-      <str>adverts</str>
-    </arr>
-  </requestHandler>
+	<requestHandler name="requestHandlerWithAdvert" class="solr.StandardRequestHandler">
+		<lst name="defaults">
+			<str name="defType">dismax</str>
+			<str name="qf">id content author brand </str>
+		</lst>
+		<arr name="first-components">
+			<str>adverts</str>
+		</arr>
+	</requestHandler>
+
+	<requestHandler name="requestHandlerWithoutAdvert" class="solr.StandardRequestHandler">
+		<lst name="defaults">
+			<str name="defType">dismax</str>
+			<str name="qf">id content author brand </str>
+		</lst>
+	</requestHandler>
   
   <searchComponent name="adverts" class="com.plugtree.solradvert.AdvertComponent"/>
 
