@@ -22,11 +22,13 @@
             <version>4.8.1</version>
             <scope>test</scope>
         </dependency>
+       
         <dependency>
             <groupId>org.apache.solr</groupId>
             <artifactId>solr-core</artifactId>
             <version>1.4.1</version>
             <type>jar</type>
+            
         </dependency>
         <dependency>
             <groupId>org.drools</groupId>
@@ -47,6 +49,12 @@
             <type>jar</type>
         </dependency>
     </dependencies>
-    
+    <repositories>
+        <repository>
+            <id>jboss</id>
+            <name>jboss</name>
+            <url>https://repository.jboss.org/nexus/content/groups/public/</url>
+        </repository>
+    </repositories>
     
 </project>
