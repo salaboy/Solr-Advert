@@ -6,12 +6,14 @@
 package com.plugtree.solradvert;
 
 import java.io.IOException;
+
 import org.apache.solr.common.params.CommonParams;
 import org.apache.solr.common.params.SolrParams;
 import org.apache.solr.handler.component.ResponseBuilder;
 import org.apache.solr.handler.component.SearchComponent;
-import org.drools.KnowledgeBase;
 import org.drools.runtime.StatefulKnowledgeSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -19,9 +21,12 @@ import org.drools.runtime.StatefulKnowledgeSession;
  */
 public class AdvertComponent extends SearchComponent {
     
+	private static Logger logger = LoggerFactory.getLogger(AdvertComponent.class);
     
     @Override
     public void prepare(ResponseBuilder rb) throws IOException {
+    	logger.debug("Preparing Advert Component...");
+    	
         SolrParams params = rb.req.getParams();
         String q = params.get(CommonParams.Q);
         
