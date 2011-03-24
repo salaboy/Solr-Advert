@@ -138,10 +138,11 @@
       </analyzer>
     </fieldtype>
 
-
+	<!-- 
     <fieldtype name="nametext" class="solr.TextField">
       <analyzer class="org.apache.lucene.analysis.core.WhitespaceAnalyzer"/>
     </fieldtype>
+     -->
 
     <fieldtype name="teststop" class="solr.TextField">
        <analyzer>
@@ -360,14 +361,14 @@
 
 
  <fields>
-   <field name="id" type="int" indexed="true" stored="true" multiValued="false" required="false"/>
-   <field name="author" type="string" indexed="true" stored="false"/>
-   <field name="content" type="text" stored="true" />
+   <field name="id" type="int" indexed="true" stored="true" multiValued="false" required="true"/>
+   <field name="product" type="string" stored="true" />
    <field name="brand" type="string" indexed="true" stored="true"/>
+   <field name="description" type="text" stored="true" />
    <field name="date" type="date" indexed="true" stored="false"/>
  </fields>
 
- <defaultSearchField>content</defaultSearchField>
+ <defaultSearchField>description</defaultSearchField>
  <uniqueKey>id</uniqueKey>
  
 </schema>

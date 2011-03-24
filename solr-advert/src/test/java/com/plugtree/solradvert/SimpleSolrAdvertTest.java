@@ -16,7 +16,7 @@ import org.apache.solr.util.AbstractSolrTestCase;
  * <requestHandler name="requestHandlerWithAdvert" class="solr.StandardRequestHandler">
  *		<lst name="defaults">
  *			<str name="defType">dismax</str>
- *			<str name="qf">id content author brand </str>
+ *			<str name="qf">id product brand description</str>
  *		</lst>
  *		<arr name="first-components">
  *			<str>adverts</str>
@@ -26,7 +26,7 @@ import org.apache.solr.util.AbstractSolrTestCase;
  *	<requestHandler name="requestHandlerWithoutAdvert" class="solr.StandardRequestHandler">
  *		<lst name="defaults">
  *			<str name="defType">dismax</str>
- *			<str name="qf">id content author brand </str>
+ *			<str name="qf">id product brand description</str>
  *		</lst>
  *	</requestHandler>
  *
@@ -43,9 +43,9 @@ public class SimpleSolrAdvertTest extends AbstractSolrTestCase {
 	}
 
 
-	private void addDoc(String id, String user, String content,
-			String brand, Date date) {
-		assertU(adoc("id", id, "author", user, "content", content, "brand", brand));
+	private void addDoc(String id, String product, String brand,
+			String description, Date date) {
+		assertU(adoc("id", id, "product", product, "brand", brand, "description", description));
 	}
 
 
@@ -66,17 +66,19 @@ public class SimpleSolrAdvertTest extends AbstractSolrTestCase {
 
 	
 	public void testSimplestCase() throws IOException, Exception {
-		this.addDoc("1", "user1", "something", "some brand", new Date());
-		this.addDoc("2", "user2", "something", "some brand", new Date());
+		this.addDoc("1", "shoes", "nike", "running shoes", new Date());
+		this.addDoc("2", "shoes", "adidas", "football shoes", new Date());
+		this.addDoc("3", "t-shirt", "reebok", "dry-fit tennis t-shirt", new Date());
+		this.addDoc("4", "short", "fila", "dry-fit tennis short", new Date());
 		assertU(commit());
 		
-		assertQ(req("q","something", "qt", "requestHandlerWithoutAdvert"), // qt defines the request handler to use. The query should match both documents
+		assertQ(req("q","shoes", "qt", "requestHandlerWithoutAdvert"), // qt defines the request handler to use. The query should match both documents
 				"//*[@numFound='2']",
 				"//result/doc[1]/int[@name='id'][.='1']", //number 1 will be the first document, with the same score
 				"//result/doc[2]/int[@name='id'][.='2']"
 		);
 		
-		assertQ(req("q","something", "qt", "requestHandlerWithAdvert"), // using AdvertComponent
+		assertQ(req("q","shoes", "qt", "requestHandlerWithAdvert"), // using AdvertComponent
 				"//*[@numFound='2']",
 				"//result/doc[1]/int[@name='id'][.='2']", //number 2 should have been boosted
 				"//result/doc[2]/int[@name='id'][.='1']"

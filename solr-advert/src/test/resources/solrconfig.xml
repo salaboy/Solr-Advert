@@ -255,9 +255,9 @@
 	<requestHandler name="requestHandlerWithAdvert" class="solr.StandardRequestHandler">
 		<lst name="defaults">
 			<str name="defType">dismax</str>
-			<str name="qf">id content author brand </str>
+			<str name="qf">id product^10 brand^10 description</str>
 		</lst>
-		<arr name="first-components">
+		<arr name="last-components">
 			<str>adverts</str>
 		</arr>
 	</requestHandler>
@@ -265,7 +265,7 @@
 	<requestHandler name="requestHandlerWithoutAdvert" class="solr.StandardRequestHandler">
 		<lst name="defaults">
 			<str name="defType">dismax</str>
-			<str name="qf">id content author brand </str>
+			<str name="qf">id product^10 brand^10 description</str>
 		</lst>
 	</requestHandler>
   

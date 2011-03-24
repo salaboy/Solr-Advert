@@ -1,0 +1,15 @@
+package com.plugtree.solradvert;
+
+public interface AdvertParams {
+  
+  public static final String ADVERT_PREFIX = "advert.";
+  
+  /**
+   * The name of the file with the definition of the rules.
+   * The value of this parameter is configured in solrconfig.xml
+   * The default value is "advert.drl"
+   */
+  public static final String ADVERT_RULES = ADVERT_PREFIX + "rules";
+
+  public static final String ADVERT_DEFAULT_RULES = "advert.drl";
+}
