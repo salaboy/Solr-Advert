@@ -2,7 +2,9 @@ package com.plugtree.solradvert;
 
 public interface AdvertParams {
   
-  public static final String ADVERT_PREFIX = "advert.";
+  public static final String COMPONENT_NAME = "advert";
+  
+  public static final String ADVERT_PREFIX = COMPONENT_NAME + ".";
   
   /**
    * The name of the file with the definition of the rules.

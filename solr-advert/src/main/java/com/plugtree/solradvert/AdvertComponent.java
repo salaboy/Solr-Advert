@@ -27,7 +27,13 @@ public class AdvertComponent extends SearchComponent implements AdvertParams {
   private static Logger logger = LoggerFactory.getLogger(AdvertComponent.class);
 
   @Override
-  public void prepare(ResponseBuilder rb) throws IOException {
+  public void prepare(ResponseBuilder rb) throws IOException {    
+    SolrParams params = rb.req.getParams();
+    
+    if(!params.getBool(COMPONENT_NAME, false)) {
+      return;
+    }
+    
     logger.debug("Preparing Advert Component...");
 
     // by wrapping the query with an AdvertQuery, we introduce
@@ -35,7 +41,6 @@ public class AdvertComponent extends SearchComponent implements AdvertParams {
     AdvertQuery aq = new AdvertQuery(rb);
     
     // get the knowledge session
-    SolrParams params = rb.req.getParams();
     String rules = params.get(ADVERT_RULES, ADVERT_DEFAULT_RULES);
     StatefulKnowledgeSession ksession = DroolsService.getInstance().getKnowledgeSession(rules);
     

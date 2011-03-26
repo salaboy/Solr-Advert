@@ -64,23 +64,25 @@ public class SimpleSolrAdvertTest extends AbstractSolrTestCase {
 		return "solrconfig.xml";
 	}
 
-	
 	public void testSimplestCase() throws IOException, Exception {
 		this.addDoc("1", "shoes", "nike", "running shoes", new Date());
 		this.addDoc("2", "shoes", "adidas", "football shoes", new Date());
-		this.addDoc("3", "t-shirt", "reebok", "dry-fit tennis t-shirt", new Date());
-		this.addDoc("4", "short", "fila", "dry-fit tennis short", new Date());
 		assertU(commit());
 		
-		assertQ(req("q","shoes", "qt", "requestHandlerWithoutAdvert"), // qt defines the request handler to use. The query should match both documents
+		// we are using the requestHandlerWithAdvert, but the request parameter
+		// "advert" isn't "true", so the documents should be returned in their
+		// index order
+		assertQ(req("q","shoes", "qt", "requestHandlerWithAdvert"),
 				"//*[@numFound='2']",
-				"//result/doc[1]/int[@name='id'][.='1']", //number 1 will be the first document, with the same score
+				"//result/doc[1]/int[@name='id'][.='1']",
 				"//result/doc[2]/int[@name='id'][.='2']"
 		);
 		
-		assertQ(req("q","shoes", "qt", "requestHandlerWithAdvert"), // using AdvertComponent
+		// now we add "&advert=true" to the request, so the Adidas shoes should
+		// be boosted (see advert.drl)
+		assertQ(req("q","shoes", "qt", "requestHandlerWithAdvert", "advert", "true"),
 				"//*[@numFound='2']",
-				"//result/doc[1]/int[@name='id'][.='2']", //number 2 should have been boosted
+				"//result/doc[1]/int[@name='id'][.='2']",
 				"//result/doc[2]/int[@name='id'][.='1']"
 		);
 
