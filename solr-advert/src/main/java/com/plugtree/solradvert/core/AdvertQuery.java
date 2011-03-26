@@ -6,9 +6,12 @@ import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.Sort;
 import org.apache.solr.handler.component.ResponseBuilder;
 import org.apache.solr.search.FunctionQParserPlugin;
 import org.apache.solr.search.QParser;
+import org.apache.solr.search.QueryParsing;
+import org.apache.solr.search.SortSpec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,6 +69,20 @@ public class AdvertQuery {
 		} catch(ParseException ex) {
 			
 		}
+	}
+	
+	/**
+	 * Replace the sort specification given in the <code>sort</code> request
+	 * parameter by the specification given in the <code>sortSpec</code> parameter
+	 * of this function.
+	 * 
+	 * @param sortSpec the sort specification to use
+	 */
+	public void setSort(String sortSpec) {
+	  Sort newSort = QueryParsing.parseSort(sortSpec, rb.req.getSchema());
+	  int offset = rb.getSortSpec().getOffset();
+	  int count = rb.getSortSpec().getCount();
+	  rb.setSortSpec(new SortSpec(newSort, offset, count));
 	}
 
 }

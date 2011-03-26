@@ -366,6 +366,7 @@
    <field name="brand" type="string" indexed="true" stored="true"/>
    <field name="description" type="text" stored="true" />
    <field name="date" type="date" indexed="true" stored="false"/>
+   <field name="price" type="double" indexed="true" stored="true"/>
  </fields>
 
  <defaultSearchField>description</defaultSearchField>

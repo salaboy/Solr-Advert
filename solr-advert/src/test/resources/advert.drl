@@ -2,9 +2,16 @@ package com.plugtree.solradvert;
 
 import com.plugtree.solradvert.core.*;
 
-rule "Boost Adidas products when the query contains the term shoes"
+rule "Boost Adidas products when searching shoes"
 	when
 		$aq : AdvertQuery(eval($aq.hasTerm("product", "shoes")))
 	then
 		$aq.boost("{!lucene}brand:adidas");
+end
+
+rule "Sort products by price when searching tennis racquets"
+	when
+		$aq : AdvertQuery(eval($aq.hasTerm("product", "tennis racquet")))
+	then
+		$aq.setSort("price asc");
 end
