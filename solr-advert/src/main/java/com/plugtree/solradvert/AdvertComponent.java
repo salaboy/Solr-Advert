@@ -8,11 +8,14 @@ package com.plugtree.solradvert;
 import java.io.IOException;
 
 import org.apache.solr.common.params.SolrParams;
+import org.apache.solr.common.util.NamedList;
 import org.apache.solr.handler.component.ResponseBuilder;
 import org.apache.solr.handler.component.SearchComponent;
-import org.drools.runtime.StatefulKnowledgeSession;
+import org.drools.runtime.StatelessKnowledgeSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.plugtree.solradvert.core.AdvertQuery;
 
@@ -25,6 +28,22 @@ import com.plugtree.solradvert.core.AdvertQuery;
 public class AdvertComponent extends SearchComponent implements AdvertParams {
 
   private static Logger logger = LoggerFactory.getLogger(AdvertComponent.class);
+  
+  private ApplicationContext kcontext;
+  
+  @Override
+  public void init(@SuppressWarnings("rawtypes") NamedList args) {
+    super.init(args);
+    
+    // initialize the Spring context
+    
+    String kcontextFile = (String)args.get(ADVERT_KNOWLEDGE_CONTEXT);
+    if(kcontextFile==null) {
+      kcontextFile = ADVERT_DEFAULT_KCONTEXT;
+    }
+    
+    kcontext = new ClassPathXmlApplicationContext(kcontextFile);
+  }
 
   @Override
   public void prepare(ResponseBuilder rb) throws IOException {    
@@ -40,13 +59,14 @@ public class AdvertComponent extends SearchComponent implements AdvertParams {
     // some useful methods, like "hasTerm", "boost", etc.
     AdvertQuery aq = new AdvertQuery(rb);
     
-    // get the knowledge session
+    // get the knowledge session using Spring
     String rules = params.get(ADVERT_RULES, ADVERT_DEFAULT_RULES);
-    StatefulKnowledgeSession ksession = DroolsService.getInstance().getKnowledgeSession(rules);
-    
-    ksession.insert(aq);
-    
-    ksession.fireAllRules();
+    try {
+      StatelessKnowledgeSession ksession = (StatelessKnowledgeSession)kcontext.getBean(rules);
+      ksession.execute(aq);
+    } catch(Exception ex) {
+      logger.error("Error while trying to execute knowledge session.", ex);
+    }
   }
 
   @Override

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:drools="http://drools.org/schema/drools-spring"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+           http://drools.org/schema/drools-spring http://drools.org/schema/drools-spring.xsd">
+
+  <drools:kbase id="kbase1">
+    <drools:resources>
+      <drools:resource type="DRL" source="classpath:advert1.drl"/>
+    </drools:resources>
+  </drools:kbase>
+  
+  <drools:kbase id="kbase2">
+    <drools:resources>
+      <drools:resource type="DRL" source="classpath:advert2.drl"/>
+    </drools:resources>
+  </drools:kbase>
+  
+  <drools:ksession id="ksession1" type="stateless" kbase="kbase1"/>
+  
+  <drools:ksession id="ksession2" type="stateless" kbase="kbase2"/>
+
+</beans>

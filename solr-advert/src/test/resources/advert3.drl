@@ -1,0 +1,10 @@
+package com.plugtree.solradvert;
+
+import com.plugtree.solradvert.core.*;
+
+rule "Always sort products by price"
+	when
+		$aq : AdvertQuery();
+	then
+		$aq.setSort("price asc");
+end

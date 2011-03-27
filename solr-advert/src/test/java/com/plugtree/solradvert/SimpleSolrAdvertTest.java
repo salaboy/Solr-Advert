@@ -8,8 +8,6 @@ package com.plugtree.solradvert;
 import java.io.IOException;
 import java.util.Date;
 
-import org.apache.solr.util.AbstractSolrTestCase;
-
 /**
  * Using the request hanlders:
  * 
@@ -32,27 +30,7 @@ import org.apache.solr.util.AbstractSolrTestCase;
  *
  * @author salaboy
  */
-public class SimpleSolrAdvertTest extends AbstractSolrTestCase {
-
-
-
-
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
-	}
-
-
-	private void addDoc(String id, String product, String brand,
-			String description, Date date, Double price) {
-		assertU(adoc("id", id, "product", product, "brand", brand, "description", description, "price", price.toString()));
-	}
-
-
-	@Override
-	public void tearDown() throws Exception {
-		super.tearDown();
-	}
+public class SimpleSolrAdvertTest extends AbstractAdvertTestCase {
 
 	@Override
 	public String getSchemaFile() {
@@ -114,18 +92,38 @@ public class SimpleSolrAdvertTest extends AbstractSolrTestCase {
     );
 
   }
+	
+	public void testAnotherSession() {
+	  this.addDoc("1", "tennis racquet", "babolat", "", new Date(), 150.0);
+    this.addDoc("2", "tennis racquet", "prince", "", new Date(), 100.0);
+    this.addDoc("3", "tennis racquet", "head", "", new Date(), 300.0);
+    assertU(commit());
+    
+    // ksession1 will sort results by price in descending order
+    assertQ(req("q","\"tennis racquet\"", "qt", "requestHandlerWithAdvert", "advert", "true", "advert.rules", "ksession1"),
+        "//*[@numFound='3']",
+        "//result/doc[1]/int[@name='id'][.='2']",
+        "//result/doc[2]/int[@name='id'][.='1']",
+        "//result/doc[3]/int[@name='id'][.='3']"
+    );
+    
+    // ksession1 will sort results by price in ascending order
+    assertQ(req("q","\"tennis racquet\"", "qt", "requestHandlerWithAdvert", "advert", "true", "advert.rules", "ksession2"),
+        "//*[@numFound='3']",
+        "//result/doc[1]/int[@name='id'][.='3']",
+        "//result/doc[2]/int[@name='id'][.='1']",
+        "//result/doc[3]/int[@name='id'][.='2']"
+    );
+	}
+	
+	public void testUndefinedSession() {
+	  assertQ(req("q","foo", "qt", "requestHandlerWithAdvert", "advert", "true", "advert.rules", "bar123"),
+        "//*[@numFound='0']"
+    );
+	}
 
 	public void testQueryGeneralQuery() {
 		assertQ(req("q","some content"));
 	}
-
-//	Will use a different request handler for these queries	
-//	public void testFieldedQuery() {
-//		assertQ(req("q","content:(some content2)"));
-//	}
-//
-//	public void testFieldedQuery2() {
-//		assertQ(req("q","brand:(some brand)"));
-//	}
-
+	
 }
