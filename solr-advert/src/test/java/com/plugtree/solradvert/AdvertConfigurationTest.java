@@ -39,7 +39,9 @@ public class AdvertConfigurationTest extends AbstractAdvertTestCase {
     
     // now we add "&advert=true" to the request, so the documents should be
     // returned sorted by price (see advert.drl)
-    assertQ(req("q","\"tennis racquet\"", "qt", "requestHandlerWithAdvert", "advert", "true"),
+    assertQ(req("q","\"tennis racquet\"", 
+        "qt", "requestHandlerWithAdvert", 
+        AdvertParams.ADVERT_COMPONENT_NAME, "true"),
         "//*[@numFound='3']",
         "//result/doc[1]/int[@name='id'][.='2']",
         "//result/doc[2]/int[@name='id'][.='1']",

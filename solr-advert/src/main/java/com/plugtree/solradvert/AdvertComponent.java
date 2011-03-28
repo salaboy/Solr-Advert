@@ -42,13 +42,13 @@ public class AdvertComponent extends SearchComponent implements AdvertParams {
   
   private ApplicationContext kcontext;
   
+  private String kcontextFile;
+  
   @Override
   public void init(@SuppressWarnings("rawtypes") NamedList args) {
     super.init(args);
     
-    // initialize the Spring context
-    
-    String kcontextFile = (String)args.get(ADVERT_KNOWLEDGE_CONTEXT);
+    kcontextFile = (String)args.get(ADVERT_KNOWLEDGE_CONTEXT);
     if(kcontextFile==null) {
       kcontextFile = ADVERT_DEFAULT_KCONTEXT;
     }
@@ -60,7 +60,7 @@ public class AdvertComponent extends SearchComponent implements AdvertParams {
   public void prepare(ResponseBuilder rb) throws IOException {    
     SolrParams params = rb.req.getParams();
     
-    if(!params.getBool(COMPONENT_NAME, false)) {
+    if(!params.getBool(ADVERT_COMPONENT_NAME, false)) {
       return;
     }
     
@@ -73,6 +73,10 @@ public class AdvertComponent extends SearchComponent implements AdvertParams {
     // get the knowledge session using Spring
     String rules = params.get(ADVERT_RULES, ADVERT_DEFAULT_RULES);
     try {
+      if(params.getBool(ADVERT_RELOAD_RULES, false)) {
+        logger.info("Reloading Spring context...");
+        kcontext = new ClassPathXmlApplicationContext(kcontextFile);
+      }
       StatelessKnowledgeSession ksession = (StatelessKnowledgeSession)kcontext.getBean(rules);
       ksession.execute(aq);
     } catch(Exception ex) {

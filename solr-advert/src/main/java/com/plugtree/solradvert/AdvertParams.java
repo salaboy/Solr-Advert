@@ -18,9 +18,9 @@ package com.plugtree.solradvert;
 
 public interface AdvertParams {
   
-  public static final String COMPONENT_NAME = "advert";
+  public static final String ADVERT_COMPONENT_NAME = "advert";
   
-  public static final String ADVERT_PREFIX = COMPONENT_NAME + ".";
+  public static final String ADVERT_PREFIX = ADVERT_COMPONENT_NAME + ".";
   
   /**
    * The name of the file with the definition of the rules.
@@ -34,4 +34,6 @@ public interface AdvertParams {
   public static final String ADVERT_DEFAULT_KCONTEXT = "knowledge-service.xml";
   
   public static final String ADVERT_KNOWLEDGE_CONTEXT = "kcontext";
+  
+  public static final String ADVERT_RELOAD_RULES = ADVERT_PREFIX + "reload";
 }

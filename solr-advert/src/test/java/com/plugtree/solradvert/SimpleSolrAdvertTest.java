@@ -16,8 +16,11 @@ package com.plugtree.solradvert;
  *  limitations under the License.
  */
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+
+import org.apache.commons.io.FileUtils;
 
 /**
  * Using the request hanlders:
@@ -42,7 +45,7 @@ import java.util.Date;
  * @author salaboy
  */
 public class SimpleSolrAdvertTest extends AbstractAdvertTestCase {
-
+  
 	@Override
 	public String getSchemaFile() {
 		return "schema.xml";
@@ -69,7 +72,8 @@ public class SimpleSolrAdvertTest extends AbstractAdvertTestCase {
 		
 		// now we add "&advert=true" to the request, so the Adidas shoes should
 		// be boosted (see advert.drl)
-		assertQ(req("q","shoes", "qt", "requestHandlerWithAdvert", "advert", "true"),
+		assertQ(req("q","shoes", "qt", "requestHandlerWithAdvert", 
+		    AdvertParams.ADVERT_COMPONENT_NAME, "true"),
 				"//*[@numFound='2']",
 				"//result/doc[1]/int[@name='id'][.='2']",
 				"//result/doc[2]/int[@name='id'][.='1']"
@@ -95,7 +99,8 @@ public class SimpleSolrAdvertTest extends AbstractAdvertTestCase {
     
     // now we add "&advert=true" to the request, so the documents should be
     // returned sorted by price (see advert.drl)
-    assertQ(req("q","\"tennis racquet\"", "qt", "requestHandlerWithAdvert", "advert", "true"),
+    assertQ(req("q","\"tennis racquet\"", "qt", "requestHandlerWithAdvert",
+        AdvertParams.ADVERT_COMPONENT_NAME, "true"),
         "//*[@numFound='3']",
         "//result/doc[1]/int[@name='id'][.='2']",
         "//result/doc[2]/int[@name='id'][.='1']",
@@ -104,14 +109,24 @@ public class SimpleSolrAdvertTest extends AbstractAdvertTestCase {
 
   }
 	
-	public void testAnotherSession() {
+	public void testTwoDifferentSessions() {
 	  this.addDoc("1", "tennis racquet", "babolat", "", new Date(), 150.0);
     this.addDoc("2", "tennis racquet", "prince", "", new Date(), 100.0);
     this.addDoc("3", "tennis racquet", "head", "", new Date(), 300.0);
     assertU(commit());
     
+    // ksession1 will sort results by index order
+    assertQ(req("q","\"tennis racquet\"", "qt", "requestHandlerWithAdvert"),
+        "//*[@numFound='3']",
+        "//result/doc[1]/int[@name='id'][.='1']",
+        "//result/doc[2]/int[@name='id'][.='2']",
+        "//result/doc[3]/int[@name='id'][.='3']"
+    );
+    
     // ksession1 will sort results by price in descending order
-    assertQ(req("q","\"tennis racquet\"", "qt", "requestHandlerWithAdvert", "advert", "true", "advert.rules", "ksession1"),
+    assertQ(req("q","\"tennis racquet\"", "qt", "requestHandlerWithAdvert",
+        AdvertParams.ADVERT_COMPONENT_NAME, "true",
+        AdvertParams.ADVERT_RULES, "ksession1"),
         "//*[@numFound='3']",
         "//result/doc[1]/int[@name='id'][.='2']",
         "//result/doc[2]/int[@name='id'][.='1']",
@@ -119,7 +134,9 @@ public class SimpleSolrAdvertTest extends AbstractAdvertTestCase {
     );
     
     // ksession1 will sort results by price in ascending order
-    assertQ(req("q","\"tennis racquet\"", "qt", "requestHandlerWithAdvert", "advert", "true", "advert.rules", "ksession2"),
+    assertQ(req("q","\"tennis racquet\"", "qt", "requestHandlerWithAdvert",
+        AdvertParams.ADVERT_COMPONENT_NAME, "true", 
+        AdvertParams.ADVERT_RULES, "ksession2"),
         "//*[@numFound='3']",
         "//result/doc[1]/int[@name='id'][.='3']",
         "//result/doc[2]/int[@name='id'][.='1']",
@@ -128,8 +145,43 @@ public class SimpleSolrAdvertTest extends AbstractAdvertTestCase {
 	}
 	
 	public void testUndefinedSession() {
-	  assertQ(req("q","foo", "qt", "requestHandlerWithAdvert", "advert", "true", "advert.rules", "bar123"),
+	  assertQ(req("q","foo", "qt", "requestHandlerWithAdvert",
+	      AdvertParams.ADVERT_COMPONENT_NAME, "true",
+	      AdvertParams.ADVERT_RULES, "bar123"),
         "//*[@numFound='0']"
+    );
+	}
+	
+	public void testRulesChangeBetweenRequests() throws Exception {
+	  this.addDoc("1", "tennis racquet", "babolat", "", new Date(), 150.0);
+    this.addDoc("2", "tennis racquet", "prince", "", new Date(), 100.0);
+    this.addDoc("3", "tennis racquet", "head", "", new Date(), 300.0);
+    assertU(commit());
+    
+    File rulesFile = new File(getClass().getResource("/advert.tmp.drl").toURI());
+    
+    // advert1.drl will sort results by price in descending order
+    FileUtils.copyURLToFile(getClass().getResource("/advert1.drl"), rulesFile);
+    assertQ(req("q","\"tennis racquet\"", "qt", "requestHandlerWithAdvert",
+        AdvertParams.ADVERT_COMPONENT_NAME, "true", 
+        AdvertParams.ADVERT_RULES, "ksession3",
+        AdvertParams.ADVERT_RELOAD_RULES, "true"),
+        "//*[@numFound='3']",
+        "//result/doc[1]/int[@name='id'][.='2']",
+        "//result/doc[2]/int[@name='id'][.='1']",
+        "//result/doc[3]/int[@name='id'][.='3']"
+    );
+    
+    // advert2.drl will sort results by price in ascending order
+    FileUtils.copyURLToFile(getClass().getResource("/advert2.drl"), rulesFile);
+    assertQ(req("q","\"tennis racquet\"", "qt", "requestHandlerWithAdvert",
+        AdvertParams.ADVERT_COMPONENT_NAME, "true",
+        AdvertParams.ADVERT_RULES, "ksession3",
+        AdvertParams.ADVERT_RELOAD_RULES, "true"),
+        "//*[@numFound='3']",
+        "//result/doc[1]/int[@name='id'][.='3']",
+        "//result/doc[2]/int[@name='id'][.='1']",
+        "//result/doc[3]/int[@name='id'][.='2']"
     );
 	}
 

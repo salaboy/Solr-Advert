@@ -33,8 +33,16 @@
     </drools:resources>
   </drools:kbase>
   
+  <drools:kbase id="kbase3">
+    <drools:resources>
+      <drools:resource type="DRL" source="classpath:advert.tmp.drl"/>
+    </drools:resources>
+  </drools:kbase>
+  
   <drools:ksession id="ksession1" type="stateless" kbase="kbase1"/>
   
   <drools:ksession id="ksession2" type="stateless" kbase="kbase2"/>
+  
+  <drools:ksession id="ksession3" type="stateless" kbase="kbase3"/>
 
 </beans>
