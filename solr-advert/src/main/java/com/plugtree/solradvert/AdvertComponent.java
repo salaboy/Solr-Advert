@@ -88,25 +88,30 @@ public class AdvertComponent extends SearchComponent implements AdvertParams {
   public void process(ResponseBuilder rb) throws IOException {
 
   }
+  
+  @Override
+  public String getName() {
+    return "Solr Advert Component";
+  }
 
   @Override
   public String getDescription() {
-    return "Advert Component!";
+    return "This component allows dynamic boosting and sorting based on Drools rules.";
   }
 
   @Override
   public String getSourceId() {
-    return "V1";
-  }
-
-  @Override
-  public String getSource() {
     return "";
   }
 
   @Override
+  public String getSource() {
+    return "$URL: https://github.com/Salaboy/Solr-Advert/raw/master/solr-advert/src/main/java/com/plugtree/solradvert/AdvertComponent.java $";
+  }
+
+  @Override
   public String getVersion() {
-    return "V1";
+    return "1.0-SNAPSHOT";
   }
 
 }
