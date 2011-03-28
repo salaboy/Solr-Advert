@@ -1,0 +1,55 @@
+Solr Advert Component
+Copyright 2011 Plugtree LLC
+
+This product includes software developed at
+Plugtree LLC (http://www.plugtree.com/) by
+Mauricio Salatino, Tomás Fernández Löbbe and Juan Grande.
+
+Some configuration files (under src/test/resources) are derived from
+the example configuration files of Apache Solr, by the Apache Software
+Foundation (see http://lucene.apache.org/solr/).
+
+The log4j configuration file (src/test/resources/log4j.properties) is derived
+from the example file examples/sort1.properties of log4j 1.2.16 distribution
+(see http://logging.apache.org/log4j/).
+
+This product includes the following software developed at The Apache Software 
+Foundation (http://www.apache.org/):
+  - log4j (see http://logging.apache.org/log4j/1.2/)
+  - Solr (see http://lucene.apache.org/solr/)
+  - Lucene Java (see http://lucene.apache.org)
+  - Commons (see http://commons.apache.org)
+  - MINA (see http://mina.apache.org/)
+
+This product includes a JUnit jar: http://junit.sourceforge.net/
+License: Common Public License - v 1.0 (http://junit.sourceforge.net/cpl-v10.html)
+
+This product includes the SLF4J library: http://www.slf4j.org/
+License: MIT License (http://www.slf4j.org/license.html)
+
+This product includes a Woodstox jar: http://woodstox.codehaus.org
+License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+This product includes a StAX jar: http://stax.codehaus.org/
+License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+This product includes the Drools Expert library: http://www.jboss.org/drools
+License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+This product includes a MVEL jar: http://mvel.codehaus.org/
+License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+This product includes an ANTLR3 jar: http://www.antlr.org/
+License: The BSD License (http://www.opensource.org/licenses/bsd-license.php)
+
+This product includes a Java Excel API jar: http://jexcelapi.sourceforge.net/
+License: http://www.gnu.org/copyleft/lesser.html
+
+This product includes the Spring Framework library: http://www.springsource.org
+License: The Apache Software License, Version 2.0  (http://www.apache.org/licenses/LICENSE-2.0.txt)
+
+This product includes an AOP Alliance jar: http://aopalliance.sourceforge.net/
+License: Public domain
+
+This product includes an Eclipse ECJ jar: http://www.eclipse.org/jdt/overview.php
+License: Eclipse Public License - v 1.0 (http://www.eclipse.org/legal/epl-v10.html)
