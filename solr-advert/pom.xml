@@ -26,7 +26,71 @@
     <packaging>jar</packaging>
 
     <name>Solr Advert</name>
-    <url>http://www.plugtree.com</url>
+    <description>This component allows to set dynamic boosting and sorting
+    by using a set of Drools rules.</description>
+    <url>http://github.com/Salaboy/Solr-Advert</url>
+    <inceptionYear>2010</inceptionYear>
+    
+    <licenses>
+      <license>
+        <name>The Apache License Version 2.0</name>
+        <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        <distribution>repo</distribution>
+        <comments>A business-friendly OSS license</comments>
+      </license>
+    </licenses>
+    
+    <organization>
+      <name>Plugtree</name>
+      <url>http://www.plugtree.com</url>
+    </organization>
+    
+    <developers>
+      <developer>
+        <id>salaboy</id>
+        <name>Mauricio Salatino</name>
+        <url>http://salaboy.wordpress.com</url>
+        <organization>Plugtree</organization>
+        <organizationUrl>http://www.plugtree.com</organizationUrl>
+        <roles>
+          <role>developer</role>
+        </roles>
+        <timezone>-3</timezone>
+      </developer>
+      <developer>
+        <id>tflobbe</id>
+        <name>Tomás Fernández Löbbe</name>
+        <organization>Plugtree</organization>
+        <organizationUrl>http://www.plugtree.com</organizationUrl>
+        <roles>
+          <role>developer</role>
+        </roles>
+        <timezone>-3</timezone>
+      </developer>
+      <developer>
+        <id>jgrande</id>
+        <name>Juan Grande</name>
+        <url>http://juanggrande.wordpress.com</url>
+        <organization>Plugtree</organization>
+        <organizationUrl>http://www.plugtree.com</organizationUrl>
+        <roles>
+          <role>developer</role>
+        </roles>
+        <timezone>-3</timezone>
+      </developer>
+    </developers>
+    
+    <issueManagement>
+      <system>GitHub</system>
+      <url>http://github.com/Salaboy/Solr-Advert/issues</url>
+    </issueManagement>
+    
+    <scm>
+      <connection>scm:git:git://github.com/Salaboy/Solr-Advert.git</connection>
+      <developerConnection>scm:git:git@github.com:Salaboy/Solr-Advert.git</developerConnection>
+      <tag>master</tag>
+      <url>https://github.com/Salaboy/Solr-Advert</url>
+    </scm>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
