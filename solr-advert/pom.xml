@@ -1,171 +1,170 @@
-<!--
-   Copyright 2011 Plugtree LLC
-
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License. 
--->
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+<!-- Copyright 2011 Plugtree LLC Licensed under the Apache License, Version 
+  2.0 (the "License"); you may not use this file except in compliance with 
+  the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 
+  Unless required by applicable law or agreed to in writing, software distributed 
+  under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES 
+  OR CONDITIONS OF ANY KIND, either express or implied. See the License for 
+  the specific language governing permissions and limitations under the License. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
             http://maven.apache.org/xsd/maven-4.0.0.xsd">
-        
-    <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.plugtree</groupId>
-    <artifactId>solr-advert</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
+  <modelVersion>4.0.0</modelVersion>
 
-    <name>Solr Advert</name>
-    <description>This component allows to set dynamic boosting and sorting
+  <groupId>com.plugtree</groupId>
+  <artifactId>solr-advert</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>Solr Advert</name>
+  <description>This component allows to set dynamic boosting and sorting
     by using a set of Drools rules.</description>
-    <url>http://github.com/Salaboy/Solr-Advert</url>
-    <inceptionYear>2010</inceptionYear>
-    
-    <licenses>
-      <license>
-        <name>The Apache License Version 2.0</name>
-        <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-        <distribution>repo</distribution>
-        <comments>A business-friendly OSS license</comments>
-      </license>
-    </licenses>
-    
-    <organization>
-      <name>Plugtree</name>
-      <url>http://www.plugtree.com</url>
-    </organization>
-    
-    <developers>
-      <developer>
-        <id>salaboy</id>
-        <name>Mauricio Salatino</name>
-        <url>http://salaboy.wordpress.com</url>
-        <organization>Plugtree</organization>
-        <organizationUrl>http://www.plugtree.com</organizationUrl>
-        <roles>
-          <role>developer</role>
-        </roles>
-        <timezone>-3</timezone>
-      </developer>
-      <developer>
-        <id>tflobbe</id>
-        <name>Tomás Fernández Löbbe</name>
-        <organization>Plugtree</organization>
-        <organizationUrl>http://www.plugtree.com</organizationUrl>
-        <roles>
-          <role>developer</role>
-        </roles>
-        <timezone>-3</timezone>
-      </developer>
-      <developer>
-        <id>jgrande</id>
-        <name>Juan Grande</name>
-        <url>http://juanggrande.wordpress.com</url>
-        <organization>Plugtree</organization>
-        <organizationUrl>http://www.plugtree.com</organizationUrl>
-        <roles>
-          <role>developer</role>
-        </roles>
-        <timezone>-3</timezone>
-      </developer>
-    </developers>
-    
-    <issueManagement>
-      <system>GitHub</system>
-      <url>http://github.com/Salaboy/Solr-Advert/issues</url>
-    </issueManagement>
-    
-    <scm>
-      <connection>scm:git:git://github.com/Salaboy/Solr-Advert.git</connection>
-      <developerConnection>scm:git:git@github.com:Salaboy/Solr-Advert.git</developerConnection>
-      <tag>master</tag>
-      <url>https://github.com/Salaboy/Solr-Advert</url>
-    </scm>
+  <url>http://github.com/Salaboy/Solr-Advert</url>
+  <inceptionYear>2010</inceptionYear>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-    
-    <build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+  <licenses>
+    <license>
+      <name>The Apache License Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+      <comments>A business-friendly OSS license</comments>
+    </license>
+  </licenses>
 
-    <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>3.8.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.5.5</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>1.5.5</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.solr</groupId>
-            <artifactId>solr-core</artifactId>
-            <version>1.4.1</version>
-            <type>jar</type>
-            
-        </dependency>
-        <dependency>
-            <groupId>org.drools</groupId>
-            <artifactId>drools-api</artifactId>
-            <version>5.1.0</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>org.drools</groupId>
-            <artifactId>drools-core</artifactId>
-            <version>5.1.0</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>org.drools</groupId>
-            <artifactId>drools-compiler</artifactId>
-            <version>5.1.0</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>org.drools</groupId>
-            <artifactId>drools-spring</artifactId>
-            <version>5.1.0</version>
-            <type>jar</type>
-        </dependency>
-    </dependencies>
-    <repositories>
-        <repository>
-            <id>jboss</id>
-            <name>jboss</name>
-            <url>https://repository.jboss.org/nexus/content/groups/public/</url>
-        </repository>
-    </repositories>
-    
+  <organization>
+    <name>Plugtree</name>
+    <url>http://www.plugtree.com</url>
+  </organization>
+
+  <developers>
+    <developer>
+      <id>salaboy</id>
+      <name>Mauricio Salatino</name>
+      <url>http://salaboy.wordpress.com</url>
+      <organization>Plugtree</organization>
+      <organizationUrl>http://www.plugtree.com</organizationUrl>
+      <roles>
+        <role>developer</role>
+      </roles>
+      <timezone>-3</timezone>
+    </developer>
+    <developer>
+      <id>tflobbe</id>
+      <name>Tomás Fernández Löbbe</name>
+      <organization>Plugtree</organization>
+      <organizationUrl>http://www.plugtree.com</organizationUrl>
+      <roles>
+        <role>developer</role>
+      </roles>
+      <timezone>-3</timezone>
+    </developer>
+    <developer>
+      <id>jgrande</id>
+      <name>Juan Grande</name>
+      <url>http://juanggrande.wordpress.com</url>
+      <organization>Plugtree</organization>
+      <organizationUrl>http://www.plugtree.com</organizationUrl>
+      <roles>
+        <role>developer</role>
+      </roles>
+      <timezone>-3</timezone>
+    </developer>
+  </developers>
+
+  <issueManagement>
+    <system>GitHub</system>
+    <url>http://github.com/Salaboy/Solr-Advert/issues</url>
+  </issueManagement>
+
+  <scm>
+    <connection>scm:git:git://github.com/Salaboy/Solr-Advert.git</connection>
+    <developerConnection>scm:git:git@github.com:Salaboy/Solr-Advert.git</developerConnection>
+    <tag>master</tag>
+    <url>https://github.com/Salaboy/Solr-Advert</url>
+  </scm>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>2.2.1</version>
+        <configuration>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.5.5</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
+      <version>1.5.5</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.solr</groupId>
+      <artifactId>solr-core</artifactId>
+      <version>1.4.1</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.drools</groupId>
+      <artifactId>drools-api</artifactId>
+      <version>5.1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.drools</groupId>
+      <artifactId>drools-core</artifactId>
+      <version>5.1.0</version>
+      <type>jar</type>
+    </dependency>
+    <dependency>
+      <groupId>org.drools</groupId>
+      <artifactId>drools-compiler</artifactId>
+      <version>5.1.0</version>
+      <type>jar</type>
+    </dependency>
+    <dependency>
+      <groupId>org.drools</groupId>
+      <artifactId>drools-spring</artifactId>
+      <version>5.1.0</version>
+      <type>jar</type>
+    </dependency>
+  </dependencies>
+  
+  <repositories>
+    <repository>
+      <id>jboss</id>
+      <name>jboss</name>
+      <url>https://repository.jboss.org/nexus/content/groups/public/</url>
+    </repository>
+  </repositories>
+
 </project>
