@@ -72,7 +72,7 @@ public class AdvertQuery {
 	 * @param qstr the query string to use 
 	 */
 	public void boost(String qstr) {
-		logger.debug("Boosting with function query '" + qstr + "'");
+		logger.debug("Adding boost query: " + qstr);
 		try {
 			QParser qparser = QParser.getParser(qstr, FunctionQParserPlugin.NAME, rb.req);
 			Query qq = qparser.parse();
@@ -95,6 +95,7 @@ public class AdvertQuery {
 	 * @param sortSpec the sort specification to use
 	 */
 	public void setSort(String sortSpec) {
+	  logger.debug("New sort specification: " + sortSpec);
 	  Sort newSort = QueryParsing.parseSort(sortSpec, rb.req.getSchema());
 	  int offset = rb.getSortSpec().getOffset();
 	  int count = rb.getSortSpec().getCount();
