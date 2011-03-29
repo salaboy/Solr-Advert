@@ -17,16 +17,21 @@ package com.plugtree.solradvert;
  */
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.apache.solr.common.params.SolrParams;
 import org.apache.solr.common.util.NamedList;
+import org.apache.solr.core.SolrCore;
 import org.apache.solr.handler.component.ResponseBuilder;
 import org.apache.solr.handler.component.SearchComponent;
+import org.apache.solr.util.plugin.SolrCoreAware;
 import org.drools.runtime.StatelessKnowledgeSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.core.io.InputStreamResource;
 
 import com.plugtree.solradvert.core.AdvertQuery;
 
@@ -36,7 +41,7 @@ import com.plugtree.solradvert.core.AdvertQuery;
  * 
  * @author salaboy
  */
-public class AdvertComponent extends SearchComponent implements AdvertParams {
+public class AdvertComponent extends SearchComponent implements AdvertParams, SolrCoreAware {
 
   private static Logger logger = LoggerFactory.getLogger(AdvertComponent.class);
   
@@ -52,8 +57,30 @@ public class AdvertComponent extends SearchComponent implements AdvertParams {
     if(kcontextFile==null) {
       kcontextFile = ADVERT_DEFAULT_KCONTEXT;
     }
-    
-    kcontext = new ClassPathXmlApplicationContext(kcontextFile);
+  }
+  
+  @Override
+  public void inform(SolrCore core) {
+    reloadContext(core);
+  }
+  
+  private void reloadContext(SolrCore core) {
+    try {
+      logger.info("Loading bean definitions from: " + kcontextFile);
+      InputStream input = core.getResourceLoader().openResource(kcontextFile);
+      if(input!=null) {
+        GenericApplicationContext context = new GenericApplicationContext();
+        XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(context);
+        reader.setValidationMode(XmlBeanDefinitionReader.VALIDATION_XSD);
+        reader.loadBeanDefinitions(new InputStreamResource(input));
+        context.refresh();
+        this.kcontext = context;
+      } else {
+        logger.error("Bean definitions file not found.");
+      }
+    } catch(Exception ex) {
+      logger.error("Error while reading Spring context.", ex);
+    }
   }
 
   @Override
@@ -75,7 +102,7 @@ public class AdvertComponent extends SearchComponent implements AdvertParams {
     try {
       if(params.getBool(ADVERT_RELOAD_RULES, false)) {
         logger.info("Reloading Spring context...");
-        kcontext = new ClassPathXmlApplicationContext(kcontextFile);
+        reloadContext(rb.req.getCore());
       }
       StatelessKnowledgeSession ksession = (StatelessKnowledgeSession)kcontext.getBean(rules);
       ksession.execute(aq);
