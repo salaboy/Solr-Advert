@@ -23,7 +23,7 @@
 
   <drools:kbase id="kbase1">
     <drools:resources>
-      <drools:resource type="DRL" source="classpath:advert3.drl"/>
+      <drools:resource type="DRL" source="classpath:solr/conf/advert3.drl"/>
     </drools:resources>
   </drools:kbase>
   

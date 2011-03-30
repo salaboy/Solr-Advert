@@ -23,19 +23,19 @@
 
   <drools:kbase id="kbase1">
     <drools:resources>
-      <drools:resource type="DRL" source="classpath:advert1.drl"/>
+      <drools:resource type="DRL" source="classpath:solr/conf/advert1.drl"/>
     </drools:resources>
   </drools:kbase>
   
   <drools:kbase id="kbase2">
     <drools:resources>
-      <drools:resource type="DRL" source="classpath:advert2.drl"/>
+      <drools:resource type="DRL" source="classpath:solr/conf/advert2.drl"/>
     </drools:resources>
   </drools:kbase>
   
   <drools:kbase id="kbase3">
     <drools:resources>
-      <drools:resource type="DRL" source="classpath:advert.tmp.drl"/>
+      <drools:resource type="DRL" source="classpath:solr/conf/advert.tmp.drl"/>
     </drools:resources>
   </drools:kbase>
   
