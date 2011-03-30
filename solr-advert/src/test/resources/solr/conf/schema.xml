@@ -361,11 +361,11 @@
 
  <fields>
    <field name="id" type="int" indexed="true" stored="true" multiValued="false" required="true"/>
-   <field name="product" type="string" stored="true" />
-   <field name="brand" type="string" indexed="true" stored="true"/>
-   <field name="description" type="text" stored="true" />
-   <field name="date" type="date" indexed="true" stored="false"/>
-   <field name="price" type="double" indexed="true" stored="true"/>
+   <field name="product" type="string" stored="true" multiValued="false"/>
+   <field name="brand" type="string" indexed="true" stored="true" multiValued="false"/>
+   <field name="description" type="text" stored="true" multiValued="false"/>
+   <field name="date" type="date" indexed="true" stored="false" multiValued="false"/>
+   <field name="price" type="double" indexed="true" stored="true" multiValued="false"/>
  </fields>
 
  <defaultSearchField>description</defaultSearchField>
