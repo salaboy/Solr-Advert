@@ -34,6 +34,11 @@ public class HasTermQueryVisitor extends QueryVisitor<Boolean> {
 	}
 	
 	@Override
+	protected Boolean getDefaultValue() {
+	  return Boolean.FALSE;
+	}
+	
+	@Override
 	public Boolean visit(BooleanQuery q) {
 		log.debug("Visiting BooleanQuery");
 		for(BooleanClause clause: q.getClauses()) {
@@ -58,7 +63,7 @@ public class HasTermQueryVisitor extends QueryVisitor<Boolean> {
 	@Override
 	public Boolean visit(DisjunctionMaxQuery q) {
 		log.debug("Visiting DisjunctionMaxQuery");
-		@SuppressWarnings("unchecked") Iterator<Query> it = q.iterator();
+		Iterator<Query> it = q.iterator();
 		while(it.hasNext()) {
 			Query qq = it.next();
 			if(Boolean.TRUE.equals(visit(qq))) {

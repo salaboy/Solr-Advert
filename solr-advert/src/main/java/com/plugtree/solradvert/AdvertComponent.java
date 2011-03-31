@@ -19,6 +19,7 @@ package com.plugtree.solradvert;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.solr.common.SolrException;
 import org.apache.solr.common.params.SolrParams;
 import org.apache.solr.common.util.NamedList;
 import org.apache.solr.core.SolrCore;
@@ -107,7 +108,7 @@ public class AdvertComponent extends SearchComponent implements AdvertParams, So
       StatelessKnowledgeSession ksession = (StatelessKnowledgeSession)kcontext.getBean(rules);
       ksession.execute(aq);
     } catch(Exception ex) {
-      logger.error("Error while trying to execute knowledge session.", ex);
+      throw new SolrException(SolrException.ErrorCode.BAD_REQUEST, ex);
     }
   }
 

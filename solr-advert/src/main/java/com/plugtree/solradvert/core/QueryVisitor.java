@@ -28,7 +28,9 @@ public abstract class QueryVisitor<T> {
 	protected Logger log = LoggerFactory.getLogger(getClass());
 	
 	public final T visit(Query q) {
-		if(q instanceof TermQuery) {
+		if(q==null) {
+		  log.error("Null query. Stopping visit.");
+		} else if(q instanceof TermQuery) {
 			return visit((TermQuery)q);
 		} else if(q instanceof BooleanQuery) {
 			return visit((BooleanQuery)q);
@@ -36,9 +38,12 @@ public abstract class QueryVisitor<T> {
 			return visit((DisjunctionMaxQuery)q);
 		} else {
 			log.warn("Found unknown query type: " + q.getClass().getName() + ". Stopping visit.");
-			return null;
 		}
+		
+		return getDefaultValue();
 	}
+	
+	protected abstract T getDefaultValue();
 	
 	public abstract T visit(TermQuery q);
 	

@@ -20,6 +20,7 @@ import java.io.File;
 import java.util.Date;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.solr.common.SolrException;
 import org.junit.Test;
 
 /**
@@ -168,7 +169,7 @@ public class SimpleSolrAdvertTest extends AbstractAdvertTestCase {
     );
 	}
 	
-  @Test
+  @Test(expected=SolrException.class)
 	public void testUndefinedSession() throws Exception {
 	  assertQuery(
 	      newRequest(
@@ -219,6 +220,15 @@ public class SimpleSolrAdvertTest extends AbstractAdvertTestCase {
         "//result/doc[3]/int[@name='id'][.='2']"
     );
 	}
+  
+  @Test
+  public void testMatchAllDocs() throws Exception {
+    assertQuery(
+        newRequest(
+            "q", "{!lucene}*:*",
+            "qt", "requestHandlerWithAdvert",
+            AdvertParams.ADVERT_COMPONENT_NAME, "true"));
+  }
 
   @Test
 	public void testQueryGeneralQuery() throws Exception {
