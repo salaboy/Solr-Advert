@@ -18,6 +18,7 @@ package com.plugtree.solradvert.core;
 
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.DisjunctionMaxQuery;
+import org.apache.lucene.search.MatchAllDocsQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 import org.slf4j.Logger;
@@ -50,5 +51,7 @@ public abstract class QueryVisitor<T> {
 	public abstract T visit(BooleanQuery q);
 	
 	public abstract T visit(DisjunctionMaxQuery q);
+	
+	public abstract T visit(MatchAllDocsQuery q);
 
 }

@@ -22,6 +22,7 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.DisjunctionMaxQuery;
+import org.apache.lucene.search.MatchAllDocsQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 
@@ -71,6 +72,11 @@ public class HasTermQueryVisitor extends QueryVisitor<Boolean> {
 			}
 		}
 		return Boolean.FALSE;
+	}
+	
+	@Override
+	public Boolean visit(MatchAllDocsQuery q) {
+	  return Boolean.FALSE;
 	}
 
 }
