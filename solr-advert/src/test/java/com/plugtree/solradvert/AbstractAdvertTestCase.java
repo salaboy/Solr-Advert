@@ -20,7 +20,10 @@ import static org.junit.Assert.assertNull;
 
 import java.util.Date;
 
+import org.apache.lucene.search.Query;
+import org.apache.solr.common.params.CommonParams;
 import org.apache.solr.request.SolrQueryRequest;
+import org.apache.solr.search.QParser;
 import org.apache.solr.util.TestHarness;
 import org.apache.solr.util.TestHarness.LocalRequestFactory;
 import org.junit.After;
@@ -54,6 +57,12 @@ public abstract class AbstractAdvertTestCase {
   
   public String getDataDirectory() {
     return tmpFolder.newFolder("data").getAbsolutePath();
+  }
+  
+  protected Query getQuery(String qstr) throws Exception {
+    SolrQueryRequest req = newRequest("q", qstr);
+    QParser qparser = QParser.getParser(req.getParams().get(CommonParams.Q), "lucene", req);
+    return qparser.getQuery();
   }
   
   protected void assertAddDoc(String id, String product, String brand, String description, Date date, Double price) throws Exception {
