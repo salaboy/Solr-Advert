@@ -229,6 +229,15 @@ public class SimpleSolrAdvertTest extends AbstractAdvertTestCase {
             "qt", "requestHandlerWithAdvert",
             AdvertParams.ADVERT_COMPONENT_NAME, "true"));
   }
+  
+  @Test
+  public void testPhraseQuery() throws Exception {
+    assertQuery(
+        newRequest(
+            "q", "{!lucene}description:i-pod",
+            "qt", "requestHandlerWithAdvert",
+            AdvertParams.ADVERT_COMPONENT_NAME, "true"));
+  }
 
   @Test
 	public void testQueryGeneralQuery() throws Exception {
