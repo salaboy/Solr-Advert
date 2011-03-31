@@ -45,7 +45,7 @@ import org.junit.Test;
  *
  * @author salaboy
  */
-public class SimpleSolrAdvertTest extends AbstractAdvertTestCase {
+public class AdvertComponentTest extends AbstractAdvertTestCase {
   
   @Override
   public String getSchemaFile() {
@@ -86,8 +86,40 @@ public class SimpleSolrAdvertTest extends AbstractAdvertTestCase {
 				"//result/doc[1]/int[@name='id'][.='2']",
 				"//result/doc[2]/int[@name='id'][.='1']"
 		);
-
 	}
+  
+  @Test
+  public void testDsl() throws Exception {
+    assertAddDoc("1", "shoes", "nike", "running shoes", new Date(), 0.0);
+    assertAddDoc("2", "shoes", "adidas", "football shoes", new Date(), 0.0);
+    assertCommit();
+    
+    // we are using the requestHandlerWithAdvert, but the request parameter
+    // "advert" isn't "true", so the documents should be returned in their
+    // index order
+    assertQuery(
+        newRequest(
+            "q","shoes", 
+            "qt", "requestHandlerWithAdvert"),
+        "//*[@numFound='2']",
+        "//result/doc[1]/int[@name='id'][.='1']",
+        "//result/doc[2]/int[@name='id'][.='2']"
+    );
+    
+    // now we add "&advert=true" to the request, so the Adidas shoes should
+    // be boosted (see advert.drl)
+    assertQuery(
+        newRequest(
+            "q","shoes", 
+            "qt", "requestHandlerWithAdvert", 
+            AdvertParams.ADVERT_COMPONENT_NAME, "true",
+            AdvertParams.ADVERT_RULES, "ksession4"),
+        "//*[@numFound='2']",
+        "//result/doc[1]/int[@name='id'][.='2']",
+        "//result/doc[2]/int[@name='id'][.='1']"
+    );
+
+  }
 	
   @Test
 	public void testSorting() throws Exception {

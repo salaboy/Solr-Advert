@@ -39,10 +39,19 @@
     </drools:resources>
   </drools:kbase>
   
+  <drools:kbase id="kbase4">
+    <drools:resources>
+      <drools:resource type="DSL" source="classpath:solr/conf/solr.dsl"/>
+      <drools:resource type="DSLR" source="classpath:solr/conf/advert4.drl"/>
+    </drools:resources>
+  </drools:kbase>
+  
   <drools:ksession id="ksession1" type="stateless" kbase="kbase1"/>
   
   <drools:ksession id="ksession2" type="stateless" kbase="kbase2"/>
   
   <drools:ksession id="ksession3" type="stateless" kbase="kbase3"/>
+  
+  <drools:ksession id="ksession4" type="stateless" kbase="kbase4"/>
 
 </beans>
