@@ -147,7 +147,7 @@
        <analyzer>
         <tokenizer class="solr.LowerCaseTokenizerFactory"/>
         <filter class="solr.StandardFilterFactory"/>
-        <filter class="solr.StopFilterFactory" words="stopwords.txt"/>
+        <filter class="solr.StopFilterFactory" words="solr/conf/stopwords.txt"/>
       </analyzer>
     </fieldtype>
 
@@ -200,7 +200,7 @@
     <fieldtype name="lowerpunctfilt" class="solr.TextField">
       <analyzer>
         <tokenizer class="solr.WhitespaceTokenizerFactory"/>
-        <filter name="syn" class="solr.SynonymFilterFactory" synonyms="synonyms.txt" expand="true"/>
+        <filter name="syn" class="solr.SynonymFilterFactory" synonyms="solr/conf/synonyms.txt" expand="true"/>
         <filter class="solr.WordDelimiterFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="1" catenateNumbers="1" catenateAll="1" splitOnCaseChange="1"/>
         <filter class="solr.LowerCaseFilterFactory"/>
       </analyzer>
@@ -242,7 +242,7 @@
     <fieldtype name="custengporterfilt" class="solr.TextField">
       <analyzer>
         <tokenizer class="solr.WhitespaceTokenizerFactory"/>
-        <filter class="solr.EnglishPorterFilterFactory" protected="protwords.txt"/>
+        <filter class="solr.EnglishPorterFilterFactory" protected="solr/conf/protwords.txt"/>
       </analyzer>
     </fieldtype>
     <fieldtype name="stopfilt" class="solr.TextField">
@@ -254,7 +254,7 @@
     <fieldtype name="custstopfilt" class="solr.TextField">
       <analyzer>
         <tokenizer class="solr.WhitespaceTokenizerFactory"/>
-        <filter class="solr.StopFilterFactory" words="stopwords.txt"/>
+        <filter class="solr.StopFilterFactory" words="solr/conf/stopwords.txt"/>
       </analyzer>
     </fieldtype>
     <fieldtype name="lengthfilt" class="solr.TextField">
@@ -266,7 +266,7 @@
     <fieldType name="charfilthtmlmap" class="solr.TextField">
       <analyzer>
         <charFilter class="solr.HTMLStripCharFilterFactory"/>
-        <charFilter class="solr.MappingCharFilterFactory" mapping="mapping-ISOLatin1Accent.txt"/>
+        <charFilter class="solr.MappingCharFilterFactory" mapping="solr/conf//mapping-ISOLatin1Accent.txt"/>
         <tokenizer class="solr.WhitespaceTokenizerFactory"/>
       </analyzer>
     </fieldType>
@@ -292,14 +292,14 @@
       <analyzer type="index">
           <tokenizer class="solr.WhitespaceTokenizerFactory"/>
           <filter class="solr.LowerCaseFilterFactory"/>
-          <filter class="solr.WordDelimiterFilterFactory" protected="protwords.txt" splitOnNumerics="0" splitOnCaseChange="0" generateWordParts="1" generateNumberParts="0" catenateWords="0" catenateNumbers="0" catenateAll="0"/>
+          <filter class="solr.WordDelimiterFilterFactory" protected="solr/conf/protwords.txt" splitOnNumerics="0" splitOnCaseChange="0" generateWordParts="1" generateNumberParts="0" catenateWords="0" catenateNumbers="0" catenateAll="0"/>
           <filter class="solr.StopFilterFactory"/>
           <filter class="solr.PorterStemFilterFactory"/>
       </analyzer>
       <analyzer type="query">
           <tokenizer class="solr.WhitespaceTokenizerFactory"/>
           <filter class="solr.LowerCaseFilterFactory"/>
-          <filter class="solr.WordDelimiterFilterFactory" protected="protwords.txt" splitOnNumerics="0" splitOnCaseChange="0" generateWordParts="1" generateNumberParts="1" catenateWords="1" catenateNumbers="1" catenateAll="0"/>
+          <filter class="solr.WordDelimiterFilterFactory" protected="solr/conf/protwords.txt" splitOnNumerics="0" splitOnCaseChange="0" generateWordParts="1" generateNumberParts="1" catenateWords="1" catenateNumbers="1" catenateAll="0"/>
           <filter class="solr.StopFilterFactory"/>
           <filter class="solr.PorterStemFilterFactory"/>
       </analyzer>
@@ -309,7 +309,7 @@
       <analyzer type="index">
           <tokenizer class="solr.WhitespaceTokenizerFactory"/>
           <filter class="solr.LowerCaseFilterFactory"/>
-          <filter class="solr.WordDelimiterFilterFactory" protected="protwords.txt" splitOnNumerics="0" splitOnCaseChange="0" generateWordParts="1" generateNumberParts="1" catenateWords="0" catenateNumbers="0" catenateAll="0"/>
+          <filter class="solr.WordDelimiterFilterFactory" protected="solr/conf/protwords.txt" splitOnNumerics="0" splitOnCaseChange="0" generateWordParts="1" generateNumberParts="1" catenateWords="0" catenateNumbers="0" catenateAll="0"/>
       </analyzer>
       <analyzer type="query">
           <tokenizer class="solr.WhitespaceTokenizerFactory"/>

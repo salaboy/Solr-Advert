@@ -80,7 +80,7 @@ public class AdvertQueryImpl implements AdvertQuery {
 	@Override
   public void setSort(String sortSpec) {
 	  logger.debug("New sort specification: " + sortSpec);
-	  Sort newSort = QueryParsing.parseSort(sortSpec, rb.req);
+	  Sort newSort = QueryParsing.parseSort(sortSpec, rb.req.getSchema());
 	  int offset = rb.getSortSpec().getOffset();
 	  int count = rb.getSortSpec().getCount();
 	  rb.setSortSpec(new SortSpec(newSort, offset, count));

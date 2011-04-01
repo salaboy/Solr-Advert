@@ -131,22 +131,8 @@
     <dependency>
       <groupId>org.apache.solr</groupId>
       <artifactId>solr-core</artifactId>
-      <version>3.1-SNAPSHOT</version>
+      <version>1.4.1</version>
       <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.solr</groupId>
-      <artifactId>solr-core</artifactId>
-      <version>3.1-SNAPSHOT</version>
-      <scope>provided</scope>
-      <classifier>tests</classifier>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.lucene</groupId>
-      <artifactId>lucene-core</artifactId>
-      <version>3.1-SNAPSHOT</version>
-      <scope>provided</scope>
-      <classifier>tests</classifier>
     </dependency>
     <dependency>
       <groupId>org.drools</groupId>

@@ -31,7 +31,7 @@ public interface AdvertParams {
 
   public static final String ADVERT_DEFAULT_RULES = "ksession1";
   
-  public static final String ADVERT_DEFAULT_KCONTEXT = "knowledge-service.xml";
+  public static final String ADVERT_DEFAULT_KCONTEXT = "solr/conf/knowledge-service.xml";
   
   public static final String ADVERT_KNOWLEDGE_CONTEXT = "kcontext";
   

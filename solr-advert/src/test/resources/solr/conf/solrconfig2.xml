@@ -269,7 +269,7 @@
 	</requestHandler>
   
   <searchComponent name="adverts" class="com.plugtree.solradvert.AdvertComponent">
-    <str name="kcontext">knowledge-service2.xml</str>
+    <str name="kcontext">solr/conf/knowledge-service2.xml</str>
   </searchComponent>
 
   <requestHandler name="/admin/" class="org.apache.solr.handler.admin.AdminHandlers" />
