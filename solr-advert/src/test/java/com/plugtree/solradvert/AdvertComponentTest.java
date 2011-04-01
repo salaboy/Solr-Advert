@@ -24,6 +24,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.solr.common.SolrException;
 import org.junit.Test;
 
+import com.plugtree.solradvert.util.AbstractAdvertTestCase;
 import com.plugtree.solradvert.util.SolrTest;
 
 /**

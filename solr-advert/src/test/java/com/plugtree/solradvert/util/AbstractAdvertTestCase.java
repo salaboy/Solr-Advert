@@ -1,4 +1,4 @@
-package com.plugtree.solradvert;
+package com.plugtree.solradvert.util;
 
 /**
  *      Copyright 2011 Plugtree LLC

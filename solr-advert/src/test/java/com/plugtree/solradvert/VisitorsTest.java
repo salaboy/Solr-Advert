@@ -7,6 +7,7 @@ import org.apache.lucene.index.Term;
 import org.junit.Test;
 
 import com.plugtree.solradvert.core.HasTermQueryVisitor;
+import com.plugtree.solradvert.util.AbstractAdvertTestCase;
 import com.plugtree.solradvert.util.SolrTest;
 
 public class VisitorsTest extends AbstractAdvertTestCase {
