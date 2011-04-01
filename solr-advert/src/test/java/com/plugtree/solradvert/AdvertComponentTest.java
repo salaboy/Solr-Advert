@@ -17,11 +17,14 @@ package com.plugtree.solradvert;
  */
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Date;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.solr.common.SolrException;
 import org.junit.Test;
+
+import com.plugtree.solradvert.util.SolrTest;
 
 /**
  * Using the request hanlders:
@@ -47,17 +50,8 @@ import org.junit.Test;
  */
 public class AdvertComponentTest extends AbstractAdvertTestCase {
   
-  @Override
-  public String getSchemaFile() {
-    return "solr/conf/schema.xml";
-  }
-  
-  @Override
-  public String getSolrConfigFile() {
-    return "solr/conf/solrconfig.xml";
-  }
-
   @Test
+  @SolrTest
 	public void testBoosting() throws Exception {
 		assertAddDoc("1", "shoes", "nike", "running shoes", new Date(), 0.0);
 		assertAddDoc("2", "shoes", "adidas", "football shoes", new Date(), 0.0);
@@ -76,7 +70,7 @@ public class AdvertComponentTest extends AbstractAdvertTestCase {
 		);
 		
 		// now we add "&advert=true" to the request, so the Adidas shoes should
-		// be boosted (see advert.drl)
+		// be boosted
 		assertQuery(
 		    newRequest(
 		        "q","shoes", 
@@ -89,7 +83,8 @@ public class AdvertComponentTest extends AbstractAdvertTestCase {
 	}
   
   @Test
-  public void testDsl() throws Exception {
+  @SolrTest
+  public void testBoostingDsl() throws Exception {
     assertAddDoc("1", "shoes", "nike", "running shoes", new Date(), 0.0);
     assertAddDoc("2", "shoes", "adidas", "football shoes", new Date(), 0.0);
     assertCommit();
@@ -107,7 +102,7 @@ public class AdvertComponentTest extends AbstractAdvertTestCase {
     );
     
     // now we add "&advert=true" to the request, so the Adidas shoes should
-    // be boosted (see advert.drl)
+    // be boosted
     assertQuery(
         newRequest(
             "q","shoes", 
@@ -122,6 +117,7 @@ public class AdvertComponentTest extends AbstractAdvertTestCase {
   }
 	
   @Test
+  @SolrTest
 	public void testSorting() throws Exception {
     assertAddDoc("1", "tennis racquet", "babolat", "", new Date(), 150.0);
     assertAddDoc("2", "tennis racquet", "prince", "", new Date(), 100.0);
@@ -142,7 +138,7 @@ public class AdvertComponentTest extends AbstractAdvertTestCase {
     );
     
     // now we add "&advert=true" to the request, so the documents should be
-    // returned sorted by price (see advert.drl)
+    // returned sorted by price
     assertQuery(
         newRequest(
             "q","\"tennis racquet\"", 
@@ -157,8 +153,9 @@ public class AdvertComponentTest extends AbstractAdvertTestCase {
   }
 	
   @Test
+  @SolrTest
 	public void testTwoDifferentSessions() throws Exception {
-	  assertAddDoc("1", "tennis racquet", "babolat", "", new Date(), 150.0);
+    assertAddDoc("1", "tennis racquet", "babolat", "", new Date(), 150.0);
     assertAddDoc("2", "tennis racquet", "prince", "", new Date(), 100.0);
     assertAddDoc("3", "tennis racquet", "head", "", new Date(), 300.0);
     assertCommit();
@@ -202,8 +199,9 @@ public class AdvertComponentTest extends AbstractAdvertTestCase {
 	}
 	
   @Test(expected=SolrException.class)
+  @SolrTest
 	public void testUndefinedSession() throws Exception {
-	  assertQuery(
+    assertQuery(
 	      newRequest(
 	          "q","foo", 
 	          "qt", "requestHandlerWithAdvert",
@@ -214,8 +212,9 @@ public class AdvertComponentTest extends AbstractAdvertTestCase {
 	}
 	
   @Test
+  @SolrTest
 	public void testRulesChangeBetweenRequests() throws Exception {
-	  assertAddDoc("1", "tennis racquet", "babolat", "", new Date(), 150.0);
+    assertAddDoc("1", "tennis racquet", "babolat", "", new Date(), 150.0);
     assertAddDoc("2", "tennis racquet", "prince", "", new Date(), 100.0);
     assertAddDoc("3", "tennis racquet", "head", "", new Date(), 300.0);
     assertCommit();
@@ -254,6 +253,7 @@ public class AdvertComponentTest extends AbstractAdvertTestCase {
 	}
   
   @Test
+  @SolrTest
   public void testMatchAllDocs() throws Exception {
     assertQuery(
         newRequest(
@@ -263,6 +263,7 @@ public class AdvertComponentTest extends AbstractAdvertTestCase {
   }
   
   @Test
+  @SolrTest
   public void testPhraseQuery() throws Exception {
     assertQuery(
         newRequest(
@@ -270,10 +271,36 @@ public class AdvertComponentTest extends AbstractAdvertTestCase {
             "qt", "requestHandlerWithAdvert",
             AdvertParams.ADVERT_COMPONENT_NAME, "true"));
   }
+  
+  @Test
+  @SolrTest(solrConfig="solr/conf/solrconfig2.xml")
+  public void testAnotherKnowledgeContext() throws IOException, Exception {
+    assertAddDoc("1", "tennis racquet", "babolat", "", new Date(), 150.0);
+    assertAddDoc("2", "tennis racquet", "prince", "", new Date(), 100.0);
+    assertAddDoc("3", "tennis racquet", "head", "", new Date(), 300.0);
+    assertCommit();
+    
+    // now we add "&advert=true" to the request, so the documents should be
+    // returned sorted by price
+    assertQuery(
+        newRequest(
+            "q", "\"tennis racquet\"", 
+            "qt", "requestHandlerWithAdvert", 
+            AdvertParams.ADVERT_COMPONENT_NAME, "true",
+            AdvertParams.ADVERT_RULES, "sessionFromAnotherContext"
+        ),
+        "//*[@numFound='3']",
+        "//result/doc[1]/int[@name='id'][.='2']",
+        "//result/doc[2]/int[@name='id'][.='1']",
+        "//result/doc[3]/int[@name='id'][.='3']"
+    );
+
+  }
 
   @Test
+  @SolrTest
 	public void testQueryGeneralQuery() throws Exception {
-		assertQuery(
+    assertQuery(
 		    newRequest("q", "some content"));
 	}
 	

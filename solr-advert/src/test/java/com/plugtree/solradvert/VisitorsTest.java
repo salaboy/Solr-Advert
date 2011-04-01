@@ -7,21 +7,13 @@ import org.apache.lucene.index.Term;
 import org.junit.Test;
 
 import com.plugtree.solradvert.core.HasTermQueryVisitor;
+import com.plugtree.solradvert.util.SolrTest;
 
 public class VisitorsTest extends AbstractAdvertTestCase {
   
-  @Override
-  public String getSchemaFile() {
-    return "solr/conf/schema.xml";
-  }
-  
-  @Override
-  public String getSolrConfigFile() {
-    return "solr/conf/solrconfig.xml";
-  }
-  
   @Test
-  public void testHasTerm() throws Exception {    
+  @SolrTest
+  public void testHasTerm() throws Exception {
     Term term = new Term("description", "solr");
     HasTermQueryVisitor visitor = new HasTermQueryVisitor(term);
     

@@ -35,6 +35,7 @@ import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.core.io.InputStreamResource;
 
 import com.plugtree.solradvert.core.AdvertQuery;
+import com.plugtree.solradvert.core.AdvertQueryImpl;
 
 /**
  * WARNING! This component must be put after the QueryComponent
@@ -96,7 +97,7 @@ public class AdvertComponent extends SearchComponent implements AdvertParams, So
 
     // by wrapping the query with an AdvertQuery, we introduce
     // some useful methods, like "hasTerm", "boost", etc.
-    AdvertQuery aq = new AdvertQuery(rb);
+    AdvertQuery aq = new AdvertQueryImpl(rb);
     
     // get the knowledge session using Spring
     String rules = params.get(ADVERT_RULES, ADVERT_DEFAULT_RULES);

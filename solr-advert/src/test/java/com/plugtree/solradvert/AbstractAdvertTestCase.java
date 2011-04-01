@@ -24,36 +24,18 @@ import org.apache.lucene.search.Query;
 import org.apache.solr.common.params.CommonParams;
 import org.apache.solr.request.SolrQueryRequest;
 import org.apache.solr.search.QParser;
-import org.apache.solr.util.TestHarness;
-import org.apache.solr.util.TestHarness.LocalRequestFactory;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
+
+import com.plugtree.solradvert.util.TestHarnessProvider;
 
 public abstract class AbstractAdvertTestCase {
   
   @Rule
   public TemporaryFolder tmpFolder = new TemporaryFolder();
   
-  private TestHarness harness;
-  
-  private LocalRequestFactory requestFactory;
-  
-  @Before
-  public void before() {
-    harness = new TestHarness(getDataDirectory(), getSolrConfigFile(), getSchemaFile());
-    requestFactory = harness.getRequestFactory("standard", 0, 20);
-  }
-  
-  @After
-  public void after() {
-    harness.close();
-  }
-  
-  public abstract String getSchemaFile();
-  
-  public abstract String getSolrConfigFile();
+  @Rule
+  public TestHarnessProvider harnessProvider = new TestHarnessProvider();
   
   public String getDataDirectory() {
     return tmpFolder.newFolder("data").getAbsolutePath();
@@ -68,7 +50,7 @@ public abstract class AbstractAdvertTestCase {
   protected void assertAddDoc(String id, String product, String brand, String description, Date date, Double price) throws Exception {
     assertNull(
         "Error adding document",
-        harness.validateAddDoc(
+        harnessProvider.getHarness().validateAddDoc(
             "id", id, 
             "product", product, 
             "brand", brand, 
@@ -78,15 +60,15 @@ public abstract class AbstractAdvertTestCase {
   }
   
   protected void assertCommit() throws Exception {
-    assertNull("Error comitting", harness.validateUpdate("<commit/>"));
+    assertNull("Error comitting", harnessProvider.getHarness().validateUpdate("<commit/>"));
   }
   
   protected SolrQueryRequest newRequest(String... args) {
-    return requestFactory.makeRequest(args);
+    return harnessProvider.getRequestFactory().makeRequest(args);
   }
   
   protected void assertQuery(SolrQueryRequest req, String... tests) throws Exception {
-    assertNull(harness.validateQuery(req, tests));
+    assertNull(harnessProvider.getHarness().validateQuery(req, tests));
   }
 
 }

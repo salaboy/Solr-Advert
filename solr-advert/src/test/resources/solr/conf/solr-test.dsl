@@ -12,10 +12,4 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-[when]Or=or
-
-[when]Query has term "{term}" in field "{field}" = $q : AdvertQuery(eval($q.hasTerm("{field}", "{term}")))
-[when]Any query = $q : AdvertQuery()
-
-[then]Add boost query "{q}" = $q.boost("{q}");
-[then]Set sort "{sortspec}" = $q.setSort("{sortspec}");
+[then]Retract query = retract($q);

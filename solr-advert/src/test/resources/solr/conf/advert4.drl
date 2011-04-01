@@ -26,3 +26,10 @@ rule "Boost Adidas products when searching shoes"
   then
     Add boost query "{!lucene}brand:adidas"
 end
+
+rule "Sort products by price when searching tennis racquets"
+  when
+    Query has term "tennis racquet" in field "product"
+  then
+    Set sort "price asc"
+end

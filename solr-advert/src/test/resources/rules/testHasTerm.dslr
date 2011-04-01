@@ -16,15 +16,11 @@ package com.plugtree.solradvert;
  *  limitations under the License.
  */
 
-import java.io.IOException;
-import java.util.Date;
+import com.plugtree.solradvert.core.*;
 
-import org.junit.Test;
-
-import com.plugtree.solradvert.util.SolrTest;
-
-public class AdvertConfigurationTest extends AbstractAdvertTestCase {
-  
-  
-
-}
+rule "testHasTerm"
+  when
+    Query has term "solr" in field "description"
+  then
+    Retract query
+end
