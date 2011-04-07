@@ -69,7 +69,7 @@ public class AdvertComponent extends SearchComponent implements AdvertParams, So
   private void reloadContext(SolrCore core) {
     try {
       logger.info("Loading bean definitions from: " + kcontextFile);
-      InputStream input = core.getResourceLoader().openResource(kcontextFile);
+      InputStream input = core.getResourceLoader().openConfig(kcontextFile);
       if(input!=null) {
         GenericApplicationContext context = new GenericApplicationContext();
         XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(context);
