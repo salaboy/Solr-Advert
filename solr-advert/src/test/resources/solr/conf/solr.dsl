@@ -15,6 +15,7 @@
 [when]Or=or
 
 [when]Query has term "{term}" in field "{field}" = $q : AdvertQuery(eval($q.hasTerm("{field}", "{term}")))
+[when]Any filter has term "{term}" in field "{field}" = $q : AdvertQuery(eval($q.hasTermInFilter("{field}", "{term}")))
 [when]Any query = $q : AdvertQuery()
 
 [then]Add boost query "{q}" = $q.boost("{q}");

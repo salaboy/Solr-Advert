@@ -73,6 +73,29 @@ public class SolrDslTest {
   }
   
   @Test
+  public void testFilterHasTerm() {
+    AdvertQuery q = createMock(AdvertQuery.class);
+    expect(q.hasTermInFilter("description", "solr")).andReturn(false).andReturn(true);
+    replay(q);
+    
+    initKBase("rules/testHasTermInFilter.dslr");
+    
+    StatefulKnowledgeSession ksession = newSession();
+    ksession.insert(q);
+    ksession.fireAllRules();
+    assertEquals(1, ksession.getObjects().size());
+    ksession.dispose();
+    
+    ksession = newSession();
+    ksession.insert(q);
+    ksession.fireAllRules();
+    assertEquals(0, ksession.getObjects().size());
+    ksession.dispose();
+    
+    verify(q);
+  }
+  
+  @Test
   public void testBoost() {
     AdvertQuery q = createMock(AdvertQuery.class);
     q.boost("name:solr");

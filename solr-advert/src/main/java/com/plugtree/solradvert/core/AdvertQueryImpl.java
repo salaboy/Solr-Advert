@@ -16,6 +16,8 @@ package com.plugtree.solradvert.core;
  *  limitations under the License.
  */
 
+import java.util.Collection;
+
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.search.BooleanClause;
@@ -39,9 +41,12 @@ public class AdvertQueryImpl implements AdvertQuery {
 	
 	private Query q;
 	
+	private Collection<Query> fqs;
+	
 	public AdvertQueryImpl(ResponseBuilder rb) {
 		this.rb = rb;
 		this.q = rb.getQuery();
+		this.fqs = rb.getFilters();
 	}
 	
 	/* (non-Javadoc)
@@ -52,6 +57,20 @@ public class AdvertQueryImpl implements AdvertQuery {
 		Term term = new Term(field, text);
 		HasTermQueryVisitor queryVisitor = new HasTermQueryVisitor(term);
 		return queryVisitor.visit(this.q);
+	}
+	
+	@Override
+	public boolean hasTermInFilter(String field, String text) {
+	  Term term = new Term(field, text);
+	  
+	  for(Query q: fqs) {
+	    HasTermQueryVisitor visitor = new HasTermQueryVisitor(term);
+	    if(visitor.visit(q)) {
+	      return true;
+	    }
+	  }
+	  
+	  return false;
 	}
 	
 	/* (non-Javadoc)

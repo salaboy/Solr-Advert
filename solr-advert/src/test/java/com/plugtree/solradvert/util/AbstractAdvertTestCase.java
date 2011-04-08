@@ -18,24 +18,54 @@ package com.plugtree.solradvert.util;
 
 import static org.junit.Assert.assertNull;
 
+import java.util.Collection;
 import java.util.Date;
+import java.util.LinkedList;
 
 import org.apache.lucene.search.Query;
 import org.apache.solr.common.params.CommonParams;
 import org.apache.solr.request.SolrQueryRequest;
 import org.apache.solr.search.QParser;
+import org.easymock.EasyMock;
+import org.junit.After;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
 
-import com.plugtree.solradvert.util.TestHarnessProvider;
-
 public abstract class AbstractAdvertTestCase {
+  
+  private Collection<Object> mocks = null;
   
   @Rule
   public TemporaryFolder tmpFolder = new TemporaryFolder();
   
   @Rule
   public TestHarnessProvider harnessProvider = new TestHarnessProvider();
+  
+  @After
+  public void validateMocks() {
+    if(mocks!=null) {
+      EasyMock.verify(mocks.toArray());
+      mocks = null;
+    }
+  }
+  
+  protected <T> T createMock(Class<T> clazz) {
+    T mock = EasyMock.createMock(clazz);
+    
+    if(mocks==null) {
+      mocks = new LinkedList<Object>();
+    }
+    
+    mocks.add(mock);
+    
+    return mock;
+  }
+  
+  protected void replayAllMocks() {
+    if(mocks!=null) {
+      EasyMock.replay(mocks.toArray());
+    }
+  }
   
   public String getDataDirectory() {
     return tmpFolder.newFolder("data").getAbsolutePath();
