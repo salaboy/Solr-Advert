@@ -18,7 +18,10 @@ package com.plugtree.solradvert;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Iterator;
 
+import org.apache.commons.collections.IteratorUtils;
+import org.apache.lucene.search.Query;
 import org.apache.solr.common.SolrException;
 import org.apache.solr.common.params.SolrParams;
 import org.apache.solr.common.util.NamedList;
@@ -36,6 +39,7 @@ import org.springframework.core.io.InputStreamResource;
 
 import com.plugtree.solradvert.core.AdvertQuery;
 import com.plugtree.solradvert.core.AdvertQueryImpl;
+import com.plugtree.solradvert.core.DefaultQueryIteratorFactory;
 
 /**
  * WARNING! This component must be put after the QueryComponent
@@ -86,7 +90,7 @@ public class AdvertComponent extends SearchComponent implements AdvertParams, So
   }
 
   @Override
-  public void prepare(ResponseBuilder rb) throws IOException {    
+  public void prepare(final ResponseBuilder rb) throws IOException {    
     SolrParams params = rb.req.getParams();
     
     if(!params.getBool(ADVERT_COMPONENT_NAME, false)) {
@@ -97,7 +101,7 @@ public class AdvertComponent extends SearchComponent implements AdvertParams, So
 
     // by wrapping the query with an AdvertQuery, we introduce
     // some useful methods, like "hasTerm", "boost", etc.
-    AdvertQuery aq = new AdvertQueryImpl(rb);
+    final AdvertQuery aq = new AdvertQueryImpl(rb);
     
     // get the knowledge session using Spring
     String rules = params.get(ADVERT_RULES, ADVERT_DEFAULT_RULES);
@@ -107,7 +111,20 @@ public class AdvertComponent extends SearchComponent implements AdvertParams, So
         reloadContext(rb.req.getCore());
       }
       StatelessKnowledgeSession ksession = (StatelessKnowledgeSession)kcontext.getBean(rules);
-      ksession.execute(aq);
+      final DefaultQueryIteratorFactory factory = new DefaultQueryIteratorFactory();
+//      ksession.execute(
+//          IteratorUtils.chainedIterator(
+//              factory.iterator(rb.getQuery()),
+//              IteratorUtils.singletonIterator(aq)));
+      ksession.execute(new Iterable<Query>() {
+        @Override
+        public Iterator<Query> iterator() {
+          return IteratorUtils.chainedIterator(
+              IteratorUtils.singletonIterator(aq),
+              factory.iterator(rb.getQuery())
+              );
+        }
+      });
     } catch(Exception ex) {
       throw new SolrException(SolrException.ErrorCode.BAD_REQUEST, ex);
     }
