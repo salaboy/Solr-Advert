@@ -161,7 +161,7 @@ public class AdvertComponentTest extends AbstractAdvertTestCase {
     assertAddDoc("3", "tennis racquet", "head", "", new Date(), 300.0);
     assertCommit();
     
-    // ksession1 will sort results by index order
+    // No rules applied
     assertQuery(
         newRequest(
             "q","\"tennis racquet\"", 
@@ -185,13 +185,13 @@ public class AdvertComponentTest extends AbstractAdvertTestCase {
         "//result/doc[3]/int[@name='id'][.='3']"
     );
     
-    // ksession1 will sort results by price in ascending order
+    // ksession3 will sort results by price in ascending order
     assertQuery(
         newRequest(
             "q","\"tennis racquet\"", 
             "qt", "requestHandlerWithAdvert",
             AdvertParams.ADVERT_COMPONENT_NAME, "true", 
-            AdvertParams.ADVERT_RULES, "ksession2"),
+            AdvertParams.ADVERT_RULES, "ksession3"),
         "//*[@numFound='3']",
         "//result/doc[1]/int[@name='id'][.='3']",
         "//result/doc[2]/int[@name='id'][.='1']",
@@ -229,7 +229,7 @@ public class AdvertComponentTest extends AbstractAdvertTestCase {
             "q", "\"tennis racquet\"", 
             "qt", "requestHandlerWithAdvert",
             AdvertParams.ADVERT_COMPONENT_NAME, "true", 
-            AdvertParams.ADVERT_RULES, "ksession3",
+            AdvertParams.ADVERT_RULES, "ksessionTmp",
             AdvertParams.ADVERT_RELOAD_RULES, "true"),
         "//*[@numFound='3']",
         "//result/doc[1]/int[@name='id'][.='2']",
@@ -238,13 +238,13 @@ public class AdvertComponentTest extends AbstractAdvertTestCase {
     );
     
     // advert2.drl will sort results by price in ascending order
-    FileUtils.copyURLToFile(getClass().getResource("/solr/conf/advert2.drl"), rulesFile);
+    FileUtils.copyURLToFile(getClass().getResource("/solr/conf/advert3.drl"), rulesFile);
     assertQuery(
         newRequest(
             "q", "\"tennis racquet\"", 
             "qt", "requestHandlerWithAdvert",
             AdvertParams.ADVERT_COMPONENT_NAME, "true",
-            AdvertParams.ADVERT_RULES, "ksession3",
+            AdvertParams.ADVERT_RULES, "ksessionTmp",
             AdvertParams.ADVERT_RELOAD_RULES, "true"),
         "//*[@numFound='3']",
         "//result/doc[1]/int[@name='id'][.='3']",
@@ -291,9 +291,9 @@ public class AdvertComponentTest extends AbstractAdvertTestCase {
             AdvertParams.ADVERT_RULES, "sessionFromAnotherContext"
         ),
         "//*[@numFound='3']",
-        "//result/doc[1]/int[@name='id'][.='2']",
+        "//result/doc[1]/int[@name='id'][.='3']",
         "//result/doc[2]/int[@name='id'][.='1']",
-        "//result/doc[3]/int[@name='id'][.='3']"
+        "//result/doc[3]/int[@name='id'][.='2']"
     );
 
   }

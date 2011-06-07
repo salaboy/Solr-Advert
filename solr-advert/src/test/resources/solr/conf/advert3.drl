@@ -22,5 +22,5 @@ rule "Always sort products by price"
 	when
 		$aq : AdvertQuery();
 	then
-		$aq.setSort("price asc");
+		$aq.setSort("price desc");
 end

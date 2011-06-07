@@ -99,8 +99,6 @@ public class AdvertComponent extends SearchComponent implements AdvertParams, So
     
     logger.debug("Preparing Advert Component...");
 
-    // by wrapping the query with an AdvertQuery, we introduce
-    // some useful methods, like "hasTerm", "boost", etc.
     final AdvertQuery aq = new AdvertQueryImpl(rb);
     
     // get the knowledge session using Spring
@@ -112,10 +110,6 @@ public class AdvertComponent extends SearchComponent implements AdvertParams, So
       }
       StatelessKnowledgeSession ksession = (StatelessKnowledgeSession)kcontext.getBean(rules);
       final DefaultQueryIteratorFactory factory = new DefaultQueryIteratorFactory();
-//      ksession.execute(
-//          IteratorUtils.chainedIterator(
-//              factory.iterator(rb.getQuery()),
-//              IteratorUtils.singletonIterator(aq)));
       ksession.execute(new Iterable<Query>() {
         @Override
         public Iterator<Query> iterator() {
@@ -152,7 +146,7 @@ public class AdvertComponent extends SearchComponent implements AdvertParams, So
 
   @Override
   public String getSource() {
-    return "$URL: https://github.com/Salaboy/Solr-Advert/raw/master/solr-advert/src/main/java/com/plugtree/solradvert/AdvertComponent.java $";
+    return "$URL: https://github.com/Salaboy/Solr-Advert/blob/queryIterator/solr-advert/src/main/java/com/plugtree/solradvert/AdvertComponent.java $";
   }
 
   @Override

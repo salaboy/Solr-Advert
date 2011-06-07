@@ -17,12 +17,11 @@ package com.plugtree.solradvert;
  */
  
 import com.plugtree.solradvert.core.*;
+import org.apache.lucene.search.TermQuery;
 
 rule "Boost Adidas products when searching shoes"
   when
     Query has term "shoes" in field "product"
-    Or
-    Query has term "aodsifjao" in field "product"
   then
     Add boost query "{!lucene}brand:adidas"
 end

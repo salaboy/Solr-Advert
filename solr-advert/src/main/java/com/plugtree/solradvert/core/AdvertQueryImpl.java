@@ -50,30 +50,6 @@ public class AdvertQueryImpl implements AdvertQuery {
 	}
 	
 	/* (non-Javadoc)
-   * @see com.plugtree.solradvert.core.AdvertQuery#hasTerm(java.lang.String, java.lang.String)
-   */
-	@Override
-  public boolean hasTerm(String field, String text) {
-		Term term = new Term(field, text);
-		HasTermQueryVisitor queryVisitor = new HasTermQueryVisitor(term);
-		return queryVisitor.visit(this.q);
-	}
-	
-	@Override
-	public boolean hasTermInFilter(String field, String text) {
-	  Term term = new Term(field, text);
-	  
-	  for(Query q: fqs) {
-	    HasTermQueryVisitor visitor = new HasTermQueryVisitor(term);
-	    if(visitor.visit(q)) {
-	      return true;
-	    }
-	  }
-	  
-	  return false;
-	}
-	
-	/* (non-Javadoc)
    * @see com.plugtree.solradvert.core.AdvertQuery#boost(java.lang.String)
    */
 	@Override

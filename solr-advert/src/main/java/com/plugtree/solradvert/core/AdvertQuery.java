@@ -30,18 +30,6 @@ import org.apache.solr.search.FunctionQParserPlugin;
 public interface AdvertQuery {
 
   /**
-   * @return <code>true</code> if this query contains a TermQuery
-   * for Term(field, text)
-   */
-  public boolean hasTerm(String field, String text);
-  
-  /**
-   * @return <code>true</code> if any filter query contains a TermQuery
-   * for Term(field, text)
-   */
-  public boolean hasTermInFilter(String field, String text);
-
-  /**
    * Add the score returned by the query <code>qstr</code>
    * to the original score of each document. By default,
    * <code>qstr</code> is parsed with {@link FunctionQParserPlugin}, but
