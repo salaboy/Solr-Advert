@@ -304,5 +304,53 @@ public class AdvertComponentTest extends AbstractAdvertTestCase {
     assertQuery(
 		    newRequest("q", "some content"));
 	}
+  
+  @Test
+  @SolrTest
+  public void testMoveTermToFilter() throws Exception {
+    assertAddDoc("1", "shoes", "adidas", "", new Date(), 150.0);
+    assertAddDoc("2", "shoes", "nike", "", new Date(), 100.0);
+    assertAddDoc("3", "socks", "adidas", "", new Date(), 300.0);
+    assertCommit();
+    
+    // assert that nothing happens when the rule is disabled
+    assertQuery(
+        newRequest(
+            "q", "adidas shoes", 
+            "qt", "requestHandlerWithAdvert",
+            "mm", "1",
+            AdvertParams.ADVERT_COMPONENT_NAME, "false",
+            AdvertParams.ADVERT_BATCH, "batchTestMoveTermToFilter"
+        ),
+        "//*[@numFound='3']"
+    );
+    
+    // assert that the rule is not applied when the term appears in a filter query
+    assertQuery(
+        newRequest(
+            "q", "shoes", 
+            "qt", "requestHandlerWithAdvert",
+            "fq", "brand:adidas OR brand:nike",
+            "mm", "1",
+            AdvertParams.ADVERT_COMPONENT_NAME, "true",
+            AdvertParams.ADVERT_BATCH, "batchTestMoveTermToFilter",
+            AdvertParams.ADVERT_RULES, "ksessionTestMoveTermToFilter"
+        ),
+        "//*[@numFound='2']"
+    );
+    
+    // assert that the rule is applied when the term appears in the main query
+    assertQuery(
+        newRequest(
+            "q", "adidas shoes", 
+            "qt", "requestHandlerWithAdvert",
+            "mm", "1",
+            AdvertParams.ADVERT_COMPONENT_NAME, "true",
+            AdvertParams.ADVERT_BATCH, "batchTestMoveTermToFilter",
+            AdvertParams.ADVERT_RULES, "ksessionTestMoveTermToFilter"
+        ),
+        "//*[@numFound='1']"
+    );
+  }
 	
 }

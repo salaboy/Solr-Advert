@@ -15,21 +15,19 @@ package com.plugtree.solradvert;
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
- 
-import com.plugtree.solradvert.core.*;
-import com.plugtree.solradvert.fact.*;
-import org.apache.lucene.search.*;
 
-rule "Boost Adidas products when searching shoes"
-  when
-    Query has term "shoe" in field "product"
-  then
-    Add boost query "{!lucene}brand:adidas"
+import com.plugtree.solradvert.fact.*;
+
+import org.apache.solr.handler.component.*;
+
+query inMainQuery(q)
+  ResponseBuilder(query==q)
+  or
+  ( ParentChildRelationship(qq : parent, child==q) and inMainQuery(qq;) ) 
 end
 
-rule "Sort products by price when searching tennis racquets"
-  when
-    Query has term "tennis racquet" in field "product"
-  then
-    Set sort "price asc"
+query inFilterQuery(q)
+  ResponseBuilder(filters contains q)
+  or
+  ( ParentChildRelationship(qq : parent, child==q) and inFilterQuery(qq;) ) 
 end

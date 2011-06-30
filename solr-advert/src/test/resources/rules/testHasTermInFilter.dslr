@@ -16,8 +16,6 @@ package com.plugtree.solradvert;
  *  limitations under the License.
  */
 
-import com.plugtree.solradvert.core.*;
-
 rule "testFilterHasTerm"
   when
     Any filter has term "solr" in field "description"

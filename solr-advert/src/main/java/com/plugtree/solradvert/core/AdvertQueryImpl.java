@@ -16,9 +16,10 @@ package com.plugtree.solradvert.core;
  *  limitations under the License.
  */
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
-import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanClause.Occur;
@@ -65,7 +66,7 @@ public class AdvertQueryImpl implements AdvertQuery {
 			
 			rb.setQuery(newq);
 		} catch(ParseException ex) {
-			
+			logger.error("Error while adding boost query: " + ex);
 		}
 	}
 	
@@ -79,6 +80,25 @@ public class AdvertQueryImpl implements AdvertQuery {
 	  int offset = rb.getSortSpec().getOffset();
 	  int count = rb.getSortSpec().getCount();
 	  rb.setSortSpec(new SortSpec(newSort, offset, count));
+	}
+	
+	@Override
+	public void addFilter(String qstr) {
+	  logger.debug("Adding filter: " + qstr);
+	  try {
+	    QParser qparser = QParser.getParser(qstr, null, rb.req);
+	    Query q = qparser.parse();
+	    
+	    List<Query> fqs = rb.getFilters();
+	    if(fqs==null) {
+	      fqs = new ArrayList<Query>();
+	      rb.setFilters(fqs);
+	    }
+	    
+	    fqs.add(q);
+	  } catch(ParseException ex) {
+	    logger.error("Error while adding filter query", ex);
+	  }
 	}
 
 }

@@ -361,7 +361,7 @@
 
  <fields>
    <field name="id" type="int" indexed="true" stored="true" multiValued="false" required="true"/>
-   <field name="product" type="string" stored="true" multiValued="false"/>
+   <field name="product" type="text" stored="true" multiValued="false"/>
    <field name="brand" type="string" indexed="true" stored="true" multiValued="false"/>
    <field name="description" type="text" stored="true" multiValued="false"/>
    <field name="date" type="date" indexed="true" stored="false" multiValued="false"/>

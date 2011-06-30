@@ -18,9 +18,10 @@ package com.plugtree.solradvert;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
-import org.apache.commons.collections.IteratorUtils;
 import org.apache.lucene.search.Query;
 import org.apache.solr.common.SolrException;
 import org.apache.solr.common.params.SolrParams;
@@ -29,6 +30,9 @@ import org.apache.solr.core.SolrCore;
 import org.apache.solr.handler.component.ResponseBuilder;
 import org.apache.solr.handler.component.SearchComponent;
 import org.apache.solr.util.plugin.SolrCoreAware;
+import org.drools.command.Command;
+import org.drools.command.CommandFactory;
+import org.drools.runtime.Globals;
 import org.drools.runtime.StatelessKnowledgeSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +43,12 @@ import org.springframework.core.io.InputStreamResource;
 
 import com.plugtree.solradvert.core.AdvertQuery;
 import com.plugtree.solradvert.core.AdvertQueryImpl;
-import com.plugtree.solradvert.core.DefaultQueryIteratorFactory;
+import com.plugtree.solradvert.core.QueryFactsCollector;
+import com.plugtree.solradvert.core.SchemaTool;
+import com.plugtree.solradvert.fact.FilterQuery;
+import com.plugtree.solradvert.fact.MainQuery;
+import com.plugtree.solradvert.fact.ParentChildRelationship;
+import com.plugtree.solradvert.fact.ParentChildRelationshipFactory;
 
 /**
  * WARNING! This component must be put after the QueryComponent
@@ -88,6 +97,65 @@ public class AdvertComponent extends SearchComponent implements AdvertParams, So
       logger.error("Error while reading Spring context.", ex);
     }
   }
+  
+  private Collection<Object> getFacts(ResponseBuilder rb) {
+    Collection<Object> facts = new ArrayList<Object>();
+//    ParentChildRelationshipFactory relationshipFactory = ParentChildRelationshipFactory.getInstance();
+    QueryFactsCollector factsCollector = new QueryFactsCollector();
+    
+    // put the main query
+    if(rb.getQuery()!=null) {
+//      MainQuery mq = new MainQuery(rb.getQuery());
+//      facts.add(mq);
+      
+      // put all the components and relationships of the main query
+//      for(Query q: mq) {
+//        facts.add(q);
+        
+//        Collection<ParentChildRelationship> relationships = relationshipFactory.getRelationships(q);
+//        if(relationships!=null) {
+//          facts.addAll(relationships);
+//        }
+//      }
+      
+      factsCollector.collect(rb.getQuery(), facts);
+    }
+    
+    // put all filter queries
+    if(rb.getFilters()!=null) {
+      for(Query fq: rb.getFilters()) {
+//        FilterQuery fqFact = new FilterQuery(fq);
+//        facts.add(fqFact);
+//        
+//        // put all the components and relationships of the filter queries
+//        for(Query q: fqFact) {
+//          facts.add(q);
+//          
+//          Collection<ParentChildRelationship> relationships = relationshipFactory.getRelationships(q);
+//          if(relationships!=null) {
+//            facts.addAll(relationships);
+//          }
+//        }
+        factsCollector.collect(fq, facts);
+      }
+    }
+    
+    // put the AdvertQuery
+    // this is only for backwards-compatibility, so old tests don't fail
+    AdvertQuery aq = new AdvertQueryImpl(rb);
+    facts.add(aq);
+    
+    // put the SchemaTool
+    SchemaTool st = new SchemaTool(rb);
+    facts.add(st);
+    
+    // put the response builder
+    facts.add(rb);
+    
+    logger.debug("Collected facts: " + facts);
+    
+    return facts;
+  }
 
   @Override
   public void prepare(final ResponseBuilder rb) throws IOException {    
@@ -99,8 +167,6 @@ public class AdvertComponent extends SearchComponent implements AdvertParams, So
     
     logger.debug("Preparing Advert Component...");
 
-    final AdvertQuery aq = new AdvertQueryImpl(rb);
-    
     // get the knowledge session using Spring
     String rules = params.get(ADVERT_RULES, ADVERT_DEFAULT_RULES);
     try {
@@ -109,16 +175,18 @@ public class AdvertComponent extends SearchComponent implements AdvertParams, So
         reloadContext(rb.req.getCore());
       }
       StatelessKnowledgeSession ksession = (StatelessKnowledgeSession)kcontext.getBean(rules);
-      final DefaultQueryIteratorFactory factory = new DefaultQueryIteratorFactory();
-      ksession.execute(new Iterable<Query>() {
-        @Override
-        public Iterator<Query> iterator() {
-          return IteratorUtils.chainedIterator(
-              IteratorUtils.singletonIterator(aq),
-              factory.iterator(rb.getQuery())
-              );
-        }
-      });
+      List<Command<?>> cmds = new ArrayList<Command<?>>();
+      Collection<?> facts = getFacts(rb);
+      cmds.add(CommandFactory.newInsertElements(facts));
+      if(params.get(ADVERT_BATCH)!=null) {
+        String extraCmdsBean = params.get(ADVERT_BATCH);
+        List<Command<?>> extraCmds = (List<Command<?>>)kcontext.getBean(extraCmdsBean);
+        logger.debug("Adding " + extraCmds.size() + " extra command(s)");
+        cmds.addAll(extraCmds);
+      }
+      Command<?> batchCmd = CommandFactory.newBatchExecution(cmds);
+      logger.debug("Executing Drools session");
+      ksession.execute(batchCmd);
     } catch(Exception ex) {
       throw new SolrException(SolrException.ErrorCode.BAD_REQUEST, ex);
     }

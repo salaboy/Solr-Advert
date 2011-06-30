@@ -14,8 +14,8 @@
 
 [when]Or=or
 
-[when]Query has term "{term}" in field "{field}" = $q : AdvertQuery(); TermQuery(term.field=="{field}", term.text=="{term}")
-[when]Any query = $q : AdvertQuery()
+[when]Query has term "{term}" in field "{field}" = $aq : AdvertQuery(); $q : TermQuery(term.field=="{field}", term.text=="{term}"); inMainQuery($q;);
+[when]Any query = $aq : AdvertQuery()
 
-[then]Add boost query "{q}" = $q.boost("{q}");
-[then]Set sort "{sortspec}" = $q.setSort("{sortspec}");
+[then]Add boost query "{q}" = $aq.boost("{q}");
+[then]Set sort "{sortspec}" = $aq.setSort("{sortspec}");

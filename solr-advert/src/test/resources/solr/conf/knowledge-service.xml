@@ -17,15 +17,19 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:drools="http://drools.org/schema/drools-spring"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p"
     xsi:schemaLocation="http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
            http://drools.org/schema/drools-spring http://drools.org/schema/drools-spring.xsd">
 
   <drools:kbase id="kbase1">
     <drools:resources>
+      <drools:resource type="DRL" source="classpath:solr/conf/solr-queries.drl"/>
       <drools:resource type="DRL" source="classpath:solr/conf/advert1.drl"/>
     </drools:resources>
   </drools:kbase>
+  
+  <drools:ksession id="ksession1" type="stateless" kbase="kbase1"/>
   
   <!--  drools:kbase id="kbase2">
     <drools:resources>
@@ -35,29 +39,53 @@
   
   <drools:kbase id="kbase3">
     <drools:resources>
+      <drools:resource type="DRL" source="classpath:solr/conf/solr-queries.drl"/>
       <drools:resource type="DRL" source="classpath:solr/conf/advert3.drl"/>
     </drools:resources>
   </drools:kbase>
   
+  <drools:ksession id="ksession3" type="stateless" kbase="kbase3"/>
+  
   <drools:kbase id="kbaseTmp">
     <drools:resources>
+      <drools:resource type="DRL" source="classpath:solr/conf/solr-queries.drl"/>
       <drools:resource type="DRL" source="classpath:solr/conf/advert.tmp.drl"/>
     </drools:resources>
   </drools:kbase>
   
+  <drools:ksession id="ksessionTmp" type="stateless" kbase="kbaseTmp"/>
+  
   <drools:kbase id="kbase4">
     <drools:resources>
+      <drools:resource type="DRL" source="classpath:solr/conf/solr-queries.drl"/>
       <drools:resource type="DSL" source="classpath:solr/conf/solr.dsl"/>
       <drools:resource type="DSLR" source="classpath:solr/conf/advert4.drl"/>
     </drools:resources>
   </drools:kbase>
   
-  <drools:ksession id="ksession1" type="stateless" kbase="kbase1"/>
-  
-  <drools:ksession id="ksessionTmp" type="stateless" kbase="kbaseTmp"/>
-  
-  <drools:ksession id="ksession3" type="stateless" kbase="kbase3"/>
-  
   <drools:ksession id="ksession4" type="stateless" kbase="kbase4"/>
+  
+  <drools:kbase id="kbaseTestMoveTermToFilter">
+    <drools:resources>
+      <drools:resource type="DRL" source="classpath:solr/conf/solr-queries.drl"/>
+      <drools:resource type="DRL" source="classpath:rules/testMoveTermToFilter.drl"/>
+    </drools:resources>
+  </drools:kbase>
+  
+  <drools:ksession id="ksessionTestMoveTermToFilter" type="stateless" kbase="kbaseTestMoveTermToFilter"/>
+  
+  <bean id="batchTestMoveTermToFilter" class="java.util.ArrayList">
+    <constructor-arg type="java.util.Collection">
+      <list>
+        <bean class="org.drools.command.CommandFactory" factory-method="newInsertElements">
+          <constructor-arg>
+            <bean class="com.plugtree.solradvert.testmodel.BrandsLoader" factory-method="load">
+              <constructor-arg value="classpath:com/plugtree/solradvert/testmodel/brands.txt"/>
+            </bean>
+          </constructor-arg>
+        </bean>
+      </list>
+    </constructor-arg>
+  </bean>
 
 </beans>

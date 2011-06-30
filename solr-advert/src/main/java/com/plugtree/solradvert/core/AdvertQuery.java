@@ -48,5 +48,12 @@ public interface AdvertQuery {
    * @param sortSpec the sort specification to use
    */
   public void setSort(String sortSpec);
+  
+  /**
+   * Adds a new filter query to the request.
+   * 
+   * @param qstr the query string of the new filter
+   */
+  public void addFilter(String qstr);
 
 }

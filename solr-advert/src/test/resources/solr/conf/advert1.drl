@@ -19,11 +19,15 @@ import org.apache.lucene.search.TermQuery;
  */
 
 import com.plugtree.solradvert.core.*;
+import com.plugtree.solradvert.fact.*;
+import org.apache.lucene.search.*;
+import java.util.*;
 
 rule "Boost Adidas products when searching shoes"
 	when
 		$aq : AdvertQuery()
-		TermQuery(term.field=="product", term.text=="shoes")
+		$q : TermQuery(term.field=="product", term.text=="shoe")
+		inMainQuery($q;)
 	then
 		$aq.boost("{!lucene}brand:adidas");
 end
@@ -31,7 +35,9 @@ end
 rule "Sort products by price when searching tennis racquets"
 	when
 		$aq : AdvertQuery()
-		TermQuery(term.field=="product", term.text=="tennis racquet")
+		$q : PhraseQuery(terms[0].field=="product", terms[0].text=="tenni", 
+		                 terms[1].field=="product", terms[1].text=="racquet")
+    inMainQuery($q;)
 	then
 		$aq.setSort("price asc");
 end

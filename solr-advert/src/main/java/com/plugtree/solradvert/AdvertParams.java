@@ -36,4 +36,6 @@ public interface AdvertParams {
   public static final String ADVERT_KNOWLEDGE_CONTEXT = "kcontext";
   
   public static final String ADVERT_RELOAD_RULES = ADVERT_PREFIX + "reload";
+  
+  public static final String ADVERT_BATCH = ADVERT_PREFIX + "batch";
 }
