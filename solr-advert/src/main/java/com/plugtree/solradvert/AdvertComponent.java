@@ -32,7 +32,6 @@ import org.apache.solr.handler.component.SearchComponent;
 import org.apache.solr.util.plugin.SolrCoreAware;
 import org.drools.command.Command;
 import org.drools.command.CommandFactory;
-import org.drools.runtime.Globals;
 import org.drools.runtime.StatelessKnowledgeSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,10 +44,6 @@ import com.plugtree.solradvert.core.AdvertQuery;
 import com.plugtree.solradvert.core.AdvertQueryImpl;
 import com.plugtree.solradvert.core.QueryFactsCollector;
 import com.plugtree.solradvert.core.SchemaTool;
-import com.plugtree.solradvert.fact.FilterQuery;
-import com.plugtree.solradvert.fact.MainQuery;
-import com.plugtree.solradvert.fact.ParentChildRelationship;
-import com.plugtree.solradvert.fact.ParentChildRelationshipFactory;
 
 /**
  * WARNING! This component must be put after the QueryComponent
