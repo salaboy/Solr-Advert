@@ -46,15 +46,6 @@
   
   <drools:ksession id="ksession3" type="stateless" kbase="kbase3"/>
   
-  <drools:kbase id="kbaseTmp">
-    <drools:resources>
-      <drools:resource type="DRL" source="classpath:solr/conf/solr-queries.drl"/>
-      <drools:resource type="DRL" source="classpath:solr/conf/advert.tmp.drl"/>
-    </drools:resources>
-  </drools:kbase>
-  
-  <drools:ksession id="ksessionTmp" type="stateless" kbase="kbaseTmp"/>
-  
   <drools:kbase id="kbase4">
     <drools:resources>
       <drools:resource type="DRL" source="classpath:solr/conf/solr-queries.drl"/>

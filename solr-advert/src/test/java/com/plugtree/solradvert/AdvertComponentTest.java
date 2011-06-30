@@ -211,46 +211,49 @@ public class AdvertComponentTest extends AbstractAdvertTestCase {
         "//*[@numFound='0']"
     );
 	}
-	
+  
   @Test
-  @SolrTest
+  @SolrTest(solrConfig="solrconfig-context3.xml")
 	public void testRulesChangeBetweenRequests() throws Exception {
-    assertAddDoc("1", "tennis racquet", "babolat", "", new Date(), 150.0);
-    assertAddDoc("2", "tennis racquet", "prince", "", new Date(), 100.0);
-    assertAddDoc("3", "tennis racquet", "head", "", new Date(), 300.0);
+    assertAddDoc("1", "", "", "", new Date(), 150.0);
+    assertAddDoc("2", "", "", "", new Date(), 100.0);
+    assertAddDoc("3", "", "", "", new Date(), 300.0);
     assertCommit();
     
-    File rulesFile = new File(getClass().getResource("/solr/conf/advert.tmp.drl").toURI());
-    
-    // advert1.drl will sort results by price in descending order
-    FileUtils.copyURLToFile(getClass().getResource("/solr/conf/advert1.drl"), rulesFile);
+    File advert3File = new File(getClass().getResource("/solr/conf/advert3.drl").toURI());
+    File advert5File = new File(getClass().getResource("/solr/conf/advert5.drl").toURI());
+    File tempFile = tmpFolder.newFile("temp.drl");
+
+    // advert3.drl will sort results by price in descending order
     assertQuery(
         newRequest(
-            "q", "\"tennis racquet\"", 
-            "qt", "requestHandlerWithAdvert",
-            AdvertParams.ADVERT_COMPONENT_NAME, "true", 
-            AdvertParams.ADVERT_RULES, "ksessionTmp",
-            AdvertParams.ADVERT_RELOAD_RULES, "true"),
-        "//*[@numFound='3']",
-        "//result/doc[1]/int[@name='id'][.='2']",
-        "//result/doc[2]/int[@name='id'][.='1']",
-        "//result/doc[3]/int[@name='id'][.='3']"
-    );
-    
-    // advert2.drl will sort results by price in ascending order
-    FileUtils.copyURLToFile(getClass().getResource("/solr/conf/advert3.drl"), rulesFile);
-    assertQuery(
-        newRequest(
-            "q", "\"tennis racquet\"", 
-            "qt", "requestHandlerWithAdvert",
-            AdvertParams.ADVERT_COMPONENT_NAME, "true",
-            AdvertParams.ADVERT_RULES, "ksessionTmp",
-            AdvertParams.ADVERT_RELOAD_RULES, "true"),
+            "q", "*:*", 
+            AdvertParams.ADVERT_COMPONENT_NAME, "true"),
         "//*[@numFound='3']",
         "//result/doc[1]/int[@name='id'][.='3']",
         "//result/doc[2]/int[@name='id'][.='1']",
         "//result/doc[3]/int[@name='id'][.='2']"
     );
+    
+    FileUtils.copyFile(advert3File, tempFile);
+    
+    try {
+      FileUtils.copyFile(advert5File, advert3File);
+      
+      // advert5.drl will sort results by price in ascending order
+      assertQuery(
+          newRequest(
+              "q", "*:*", 
+              AdvertParams.ADVERT_COMPONENT_NAME, "true",
+              AdvertParams.ADVERT_RELOAD_RULES, "true"),
+          "//*[@numFound='3']",
+          "//result/doc[1]/int[@name='id'][.='2']",
+          "//result/doc[2]/int[@name='id'][.='1']",
+          "//result/doc[3]/int[@name='id'][.='3']"
+      );
+    } finally {
+      FileUtils.copyFile(tempFile, advert3File);
+    }
 	}
   
   @Test

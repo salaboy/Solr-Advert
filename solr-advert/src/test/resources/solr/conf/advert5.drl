@@ -1,7 +1,5 @@
 package com.plugtree.solradvert;
 
-import org.apache.lucene.search.TermQuery;
-
 /**
  *      Copyright 2011 Plugtree LLC
  *
@@ -19,26 +17,10 @@ import org.apache.lucene.search.TermQuery;
  */
 
 import com.plugtree.solradvert.core.*;
-import com.plugtree.solradvert.fact.*;
-import org.apache.lucene.search.*;
 
-rule "Boost Adidas products when searching shoes"
+rule "Always sort products by price"
 	when
-		$aq : AdvertQuery()
-		$q : MainQuery()
-		//Query(class==(TermQuery.class), term.field=="product", term.text=="shoe") from $q
-		TermQuery(this memberOf $q)
+		$aq : AdvertQuery();
 	then
-		$aq.boost("{!lucene}brand:adidas");
-end
-
-rule "Sort products by price when searching tennis racquets"
-	when
-		$aq : AdvertQuery()
-		$q : MainQuery()
-		//PhraseQuery(terms[0].field=="product", terms[0].text=="tenni", terms[1].field=="product", terms[1].text=="racquet")
-		PhraseQuery(this memberOf $q)
-	then
-	  System.out.println($q);
 		$aq.setSort("price asc");
 end
