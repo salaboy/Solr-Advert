@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.DisjunctionMaxQuery;
 import org.apache.lucene.search.Query;
 
 public class DefaultParentChildRelationshipFactory extends ParentChildRelationshipFactory {
@@ -13,7 +14,12 @@ public class DefaultParentChildRelationshipFactory extends ParentChildRelationsh
   
   public DefaultParentChildRelationshipFactory() {
     factories = new HashMap<Class<?>, ParentChildRelationshipFactory>();
-    factories.put(BooleanQuery.class, new BooleanParentChildRelationship.BooleanParentChildRelationshipFactory());
+    factories.put(
+        BooleanQuery.class, 
+        new BooleanParentChildRelationship.BooleanParentChildRelationshipFactory());
+    factories.put(
+        DisjunctionMaxQuery.class, 
+        new DismaxParentChildRelationship.DismaxParentChildRelationshipFactory());
   }
   
   public Collection<ParentChildRelationship> getRelationships(Query parent) {
