@@ -71,7 +71,7 @@ public class AdvertComponentTest extends AbstractAdvertTestCase {
 		);
 		
 		// now we add "&advert=true" to the request, so the Adidas shoes should
-		// be boosted
+		// be boosted (see rules/advert1.drl)
 		assertQuery(
 		    newRequest(
 		        "q","shoes", 
@@ -172,7 +172,7 @@ public class AdvertComponentTest extends AbstractAdvertTestCase {
         "//result/doc[3]/int[@name='id'][.='3']"
     );
     
-    // ksession1 will sort results by price in descending order
+    // ksession1 will sort results by price in ascending order
     assertQuery(
         newRequest(
             "q","\"tennis racquet\"", 
@@ -185,7 +185,7 @@ public class AdvertComponentTest extends AbstractAdvertTestCase {
         "//result/doc[3]/int[@name='id'][.='3']"
     );
     
-    // ksession3 will sort results by price in ascending order
+    // ksession3 will sort results by price in descending order
     assertQuery(
         newRequest(
             "q","\"tennis racquet\"", 
@@ -220,8 +220,8 @@ public class AdvertComponentTest extends AbstractAdvertTestCase {
     assertAddDoc("3", "", "", "", new Date(), 300.0);
     assertCommit();
     
-    File advert3File = new File(getClass().getResource("/solr/conf/advert3.drl").toURI());
-    File advert5File = new File(getClass().getResource("/solr/conf/advert5.drl").toURI());
+    File advert3File = new File(getClass().getResource("/rules/testSortByPriceDesc.drl").toURI());
+    File advert5File = new File(getClass().getResource("/rules/testSortByPriceAsc.drl").toURI());
     File tempFile = tmpFolder.newFile("temp.drl");
 
     // advert3.drl will sort results by price in descending order

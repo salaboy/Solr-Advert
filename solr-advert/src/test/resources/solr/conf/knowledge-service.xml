@@ -24,23 +24,17 @@
 
   <drools:kbase id="kbase1">
     <drools:resources>
-      <drools:resource type="DRL" source="classpath:solr/conf/solr-queries.drl"/>
-      <drools:resource type="DRL" source="classpath:solr/conf/advert1.drl"/>
+      <drools:resource type="DRL" source="classpath:rules/solr-queries.drl"/>
+      <drools:resource type="DRL" source="classpath:rules/testBasic.drl"/>
     </drools:resources>
   </drools:kbase>
   
   <drools:ksession id="ksession1" type="stateless" kbase="kbase1"/>
   
-  <!--  drools:kbase id="kbase2">
-    <drools:resources>
-      <drools:resource type="DRL" source="classpath:solr/conf/advert2.drl"/>
-    </drools:resources>
-  </drools:kbase-->
-  
   <drools:kbase id="kbase3">
     <drools:resources>
-      <drools:resource type="DRL" source="classpath:solr/conf/solr-queries.drl"/>
-      <drools:resource type="DRL" source="classpath:solr/conf/advert3.drl"/>
+      <drools:resource type="DRL" source="classpath:rules/solr-queries.drl"/>
+      <drools:resource type="DRL" source="classpath:rules/testSortByPriceDesc.drl"/>
     </drools:resources>
   </drools:kbase>
   
@@ -48,9 +42,9 @@
   
   <drools:kbase id="kbase4">
     <drools:resources>
-      <drools:resource type="DRL" source="classpath:solr/conf/solr-queries.drl"/>
-      <drools:resource type="DSL" source="classpath:solr/conf/solr.dsl"/>
-      <drools:resource type="DSLR" source="classpath:solr/conf/advert4.drl"/>
+      <drools:resource type="DRL" source="classpath:rules/solr-queries.drl"/>
+      <drools:resource type="DSL" source="classpath:rules/solr.dsl"/>
+      <drools:resource type="DSLR" source="classpath:rules/testDsl.drl"/>
     </drools:resources>
   </drools:kbase>
   
@@ -58,7 +52,7 @@
   
   <drools:kbase id="kbaseTestMoveTermToFilter">
     <drools:resources>
-      <drools:resource type="DRL" source="classpath:solr/conf/solr-queries.drl"/>
+      <drools:resource type="DRL" source="classpath:rules/solr-queries.drl"/>
       <drools:resource type="DRL" source="classpath:rules/testMoveTermToFilter.drl"/>
     </drools:resources>
   </drools:kbase>
