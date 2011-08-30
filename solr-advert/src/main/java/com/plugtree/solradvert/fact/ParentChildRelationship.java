@@ -30,5 +30,21 @@ public abstract class ParentChildRelationship {
   }
   
   public abstract void remove();
+  
+  @Override
+  public boolean equals(Object obj) {
+    if(obj==null || !obj.getClass().equals(getClass())) {
+      return false;
+    }
+    
+    ParentChildRelationship rel = (ParentChildRelationship)obj;
+    
+    return rel.parent.equals(parent) && rel.child.equals(child);
+  }
+  
+  @Override
+  public int hashCode() {
+    return parent.hashCode() ^ child.hashCode();
+  }
 
 }
