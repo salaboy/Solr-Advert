@@ -17,7 +17,6 @@ package com.plugtree.solradvert;
  */
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -35,15 +34,12 @@ import org.drools.command.CommandFactory;
 import org.drools.runtime.StatelessKnowledgeSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.GenericApplicationContext;
-import org.springframework.core.io.InputStreamResource;
 
 import com.plugtree.solradvert.core.AdvertQuery;
 import com.plugtree.solradvert.core.AdvertQueryImpl;
 import com.plugtree.solradvert.core.QueryFactsCollector;
 import com.plugtree.solradvert.core.SchemaTool;
+import com.plugtree.solradvert.core.SolrXmlApplicationContext;
 
 /**
  * WARNING! This component must be put after the QueryComponent
@@ -55,7 +51,7 @@ public class AdvertComponent extends SearchComponent implements AdvertParams, So
 
   private static Logger logger = LoggerFactory.getLogger(AdvertComponent.class);
   
-  private ApplicationContext kcontext;
+  private SolrXmlApplicationContext kcontext;
   
   private String kcontextFile;
   
@@ -74,66 +70,32 @@ public class AdvertComponent extends SearchComponent implements AdvertParams, So
     // NOTE: ecj can't be used because it conflicts with the version
     // included in Jetty
     System.setProperty("drools.dialect.java.compiler", "JANINO");
-    reloadContext(core);
+    
+    loadKContext(core);
   }
   
-  private void reloadContext(SolrCore core) {
+  private void loadKContext(SolrCore core) {
     try {
       logger.info("Loading bean definitions from: " + kcontextFile);
-      InputStream input = core.getResourceLoader().openResource(kcontextFile);
-      if(input!=null) {
-        GenericApplicationContext context = new GenericApplicationContext();
-        XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(context);
-        reader.setValidationMode(XmlBeanDefinitionReader.VALIDATION_XSD);
-        reader.loadBeanDefinitions(new InputStreamResource(input));
-        context.refresh();
-        this.kcontext = context;
-      } else {
-        logger.error("Bean definitions file not found.");
-      }
+      kcontext = new SolrXmlApplicationContext(core, kcontextFile);
+      kcontext.refresh();
     } catch(Exception ex) {
-      logger.error("Error while reading Spring context.", ex);
+      throw new SolrException(SolrException.ErrorCode.SERVER_ERROR, ex);
     }
   }
   
   private Collection<Object> getFacts(ResponseBuilder rb) {
     Collection<Object> facts = new ArrayList<Object>();
-//    ParentChildRelationshipFactory relationshipFactory = ParentChildRelationshipFactory.getInstance();
     QueryFactsCollector factsCollector = new QueryFactsCollector();
     
     // put the main query
     if(rb.getQuery()!=null) {
-//      MainQuery mq = new MainQuery(rb.getQuery());
-//      facts.add(mq);
-      
-      // put all the components and relationships of the main query
-//      for(Query q: mq) {
-//        facts.add(q);
-        
-//        Collection<ParentChildRelationship> relationships = relationshipFactory.getRelationships(q);
-//        if(relationships!=null) {
-//          facts.addAll(relationships);
-//        }
-//      }
-      
       factsCollector.collect(rb.getQuery(), facts);
     }
     
-    // put all filter queries
+    // put all the filter queries
     if(rb.getFilters()!=null) {
       for(Query fq: rb.getFilters()) {
-//        FilterQuery fqFact = new FilterQuery(fq);
-//        facts.add(fqFact);
-//        
-//        // put all the components and relationships of the filter queries
-//        for(Query q: fqFact) {
-//          facts.add(q);
-//          
-//          Collection<ParentChildRelationship> relationships = relationshipFactory.getRelationships(q);
-//          if(relationships!=null) {
-//            facts.addAll(relationships);
-//          }
-//        }
         factsCollector.collect(fq, facts);
       }
     }
@@ -165,24 +127,34 @@ public class AdvertComponent extends SearchComponent implements AdvertParams, So
     
     logger.debug("Preparing Advert Component...");
 
-    // get the knowledge session using Spring
-    String rules = params.get(ADVERT_RULES, ADVERT_DEFAULT_RULES);
     try {
+      // if advert.reload=true ---> reload spring's context
       if(params.getBool(ADVERT_RELOAD_RULES, false)) {
         logger.info("Reloading Spring context...");
-        reloadContext(rb.req.getCore());
+        if(kcontext!=null) {
+          kcontext.refresh();
+        } else {
+          loadKContext(rb.req.getCore());
+        }
       }
+      
+      String rules = params.get(ADVERT_RULES, ADVERT_DEFAULT_RULES);
       StatelessKnowledgeSession ksession = (StatelessKnowledgeSession)kcontext.getBean(rules);
+      
       List<Command<?>> cmds = new ArrayList<Command<?>>();
-      Collection<?> facts = getFacts(rb);
-      cmds.add(CommandFactory.newInsertElements(facts));
+      
       if(params.get(ADVERT_BATCH)!=null) {
         String extraCmdsBean = params.get(ADVERT_BATCH);
         List<Command<?>> extraCmds = (List<Command<?>>)kcontext.getBean(extraCmdsBean);
-        logger.debug("Adding " + extraCmds.size() + " extra command(s)");
         cmds.addAll(extraCmds);
+        logger.debug("Added " + extraCmds.size() + " extra command(s) to batch execution");
       }
+      
+      Collection<?> facts = getFacts(rb);
+      cmds.add(CommandFactory.newInsertElements(facts));
+      
       Command<?> batchCmd = CommandFactory.newBatchExecution(cmds);
+      
       logger.debug("Executing Drools session");
       ksession.execute(batchCmd);
     } catch(Exception ex) {

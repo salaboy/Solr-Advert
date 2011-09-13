@@ -65,7 +65,7 @@
         <bean class="org.drools.command.CommandFactory" factory-method="newInsertElements">
           <constructor-arg>
             <bean class="com.plugtree.solradvert.testmodel.BrandsLoader" factory-method="load">
-              <constructor-arg value="classpath:com/plugtree/solradvert/testmodel/brands.txt"/>
+              <constructor-arg value="com/plugtree/solradvert/testmodel/brands.txt"/>
             </bean>
           </constructor-arg>
         </bean>
