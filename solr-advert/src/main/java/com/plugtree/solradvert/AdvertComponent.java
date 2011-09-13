@@ -71,6 +71,9 @@ public class AdvertComponent extends SearchComponent implements AdvertParams, So
   
   @Override
   public void inform(SolrCore core) {
+    // NOTE: ecj can't be used because it conflicts with the version
+    // included in Jetty
+    System.setProperty("drools.dialect.java.compiler", "JANINO");
     reloadContext(core);
   }
   
