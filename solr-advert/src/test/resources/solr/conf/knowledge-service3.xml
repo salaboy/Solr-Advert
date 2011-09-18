@@ -23,7 +23,7 @@
 
   <drools:kbase id="kbase1">
     <drools:resources>
-      <drools:resource type="DRL" source="classpath:rules/solr-queries.drl"/>
+      <drools:resource type="DRL" source="classpath:com/plugtree/solradvert/rules/solr-queries.drl"/>
       <drools:resource type="DRL" source="classpath:rules/testSortByPriceDesc.drl"/>
     </drools:resources>
   </drools:kbase>

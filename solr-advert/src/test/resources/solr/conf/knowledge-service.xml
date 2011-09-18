@@ -24,7 +24,7 @@
 
   <drools:kbase id="kbase1">
     <drools:resources>
-      <drools:resource type="DRL" source="classpath:rules/solr-queries.drl"/>
+      <drools:resource type="DRL" source="classpath:com/plugtree/solradvert/rules/solr-queries.drl"/>
       <drools:resource type="DRL" source="classpath:rules/testBasic.drl"/>
     </drools:resources>
   </drools:kbase>
@@ -33,7 +33,7 @@
   
   <drools:kbase id="kbase3">
     <drools:resources>
-      <drools:resource type="DRL" source="classpath:rules/solr-queries.drl"/>
+      <drools:resource type="DRL" source="classpath:com/plugtree/solradvert/rules/solr-queries.drl"/>
       <drools:resource type="DRL" source="classpath:rules/testSortByPriceDesc.drl"/>
     </drools:resources>
   </drools:kbase>
@@ -42,7 +42,7 @@
   
   <drools:kbase id="kbase4">
     <drools:resources>
-      <drools:resource type="DRL" source="classpath:rules/solr-queries.drl"/>
+      <drools:resource type="DRL" source="classpath:com/plugtree/solradvert/rules/solr-queries.drl"/>
       <drools:resource type="DSL" source="classpath:rules/solr.dsl"/>
       <drools:resource type="DSLR" source="classpath:rules/testDsl.drl"/>
     </drools:resources>
@@ -52,7 +52,7 @@
   
   <drools:kbase id="kbaseTestMoveTermToFilter">
     <drools:resources>
-      <drools:resource type="DRL" source="classpath:rules/solr-queries.drl"/>
+      <drools:resource type="DRL" source="classpath:com/plugtree/solradvert/rules/solr-queries.drl"/>
       <drools:resource type="DRL" source="classpath:rules/testMoveTermToFilter.drl"/>
     </drools:resources>
   </drools:kbase>
