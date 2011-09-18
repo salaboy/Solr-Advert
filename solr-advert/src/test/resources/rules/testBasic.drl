@@ -1,7 +1,5 @@
 package com.plugtree.solradvert;
 
-import org.apache.lucene.search.TermQuery;
-
 /**
  *      Copyright 2011 Plugtree LLC
  *
