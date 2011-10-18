@@ -1,0 +1,78 @@
+package com.plugtree.solradvert;
+
+#  Copyright 2011 Plugtree LLC
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+
+import org.apache.solr.handler.component.ResponseBuilder;
+
+import org.apache.lucene.search.TermQuery;
+
+import com.plugtree.solradvert.core.*;
+import com.plugtree.solradvert.example.*;
+
+import org.slf4j.Logger;
+
+global org.slf4j.Logger logger;
+global com.plugtree.solradvert.example.UsersService users;
+
+rule "If the user age is between 25 and 35 years, boost compact cars"
+  when
+    ResponseBuilder($userid : req.params.get("userid"));
+    User( age >= 25, age < 35 ) from users.getUser($userid);
+    
+    # this is an utility object, could be added as a global 
+    $aq : AdvertQuery();
+  then
+    logger.info("The user age is between 25 and 35 years, boosting compact cars");
+    $aq.boost("{!lucene}cat:compact^10");
+end
+
+rule "If the user age is between 35 and 50 years, boost sedan cars"
+  when
+    ResponseBuilder($userid : req.params.get("userid"));
+    User( age >= 35, age < 50 ) from users.getUser($userid);
+    
+    # this is an utility object, could be added as a global 
+    $aq : AdvertQuery();
+  then
+    logger.debug("The user age is between 35 and 50 years, boosting sedans");
+    $aq.boost("{!lucene}cat:sedan^10");
+end
+
+rule "If the user age is between 50 and 70 years, boost cars with safety devices"
+  when
+    ResponseBuilder($userid : req.params.get("userid"));
+    User( age >= 50, age < 70 ) from users.getUser($userid);
+    
+    # this is an utility object, could be added as a global 
+    $aq : AdvertQuery();
+  then
+    logger.debug("The user age is between 50 and 70 years, boosting cars with safety devices");
+    $aq.boost("{!lucene}features:(" +
+      "antilock_breaking_system OR " +
+      "driver_airbag OR " +
+      "passenger_airbag OR " +
+      "side_airbag OR " +
+      "traction_control_system)^10");
+end
+
+rule "If the user searches for a sedan car, then boost the brand new Chevrolet Bora"
+  when
+    $aq : AdvertQuery();
+    $q : TermQuery(term.text=="sedan");
+    inMainQuery($q;);
+  then
+    logger.debug("The user searched for the word 'sedan', so I'm boosting Chevrolet Bora");
+    $aq.boost("{!lucene}id:BORA^100");
+end
