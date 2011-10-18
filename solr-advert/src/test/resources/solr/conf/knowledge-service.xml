@@ -29,16 +29,12 @@
     </drools:resources>
   </drools:kbase>
   
-  <drools:ksession id="ksession1" type="stateless" kbase="kbase1"/>
-  
   <drools:kbase id="kbase3">
     <drools:resources>
       <drools:resource type="DRL" source="classpath:com/plugtree/solradvert/rules/solr-queries.drl"/>
       <drools:resource type="DRL" source="classpath:rules/testSortByPriceDesc.drl"/>
     </drools:resources>
   </drools:kbase>
-  
-  <drools:ksession id="ksession3" type="stateless" kbase="kbase3"/>
   
   <drools:kbase id="kbase4">
     <drools:resources>
@@ -48,7 +44,6 @@
     </drools:resources>
   </drools:kbase>
   
-  <drools:ksession id="ksession4" type="stateless" kbase="kbase4"/>
   
   <drools:kbase id="kbaseTestMoveTermToFilter">
     <drools:resources>
@@ -57,8 +52,7 @@
     </drools:resources>
   </drools:kbase>
   
-  <drools:ksession id="ksessionTestMoveTermToFilter" type="stateless" kbase="kbaseTestMoveTermToFilter"/>
-  
+
   <bean id="batchTestMoveTermToFilter" class="java.util.ArrayList">
     <constructor-arg type="java.util.Collection">
       <list>
