@@ -109,7 +109,7 @@ public class AdvertComponentTest extends AbstractAdvertTestCase {
             "q","shoes", 
             "qt", "requestHandlerWithAdvert", 
             AdvertParams.ADVERT_COMPONENT_NAME, "true",
-            AdvertParams.ADVERT_RULES, "ksession4"),
+            AdvertParams.ADVERT_RULES, "kbase4"),
         "//*[@numFound='2']",
         "//result/doc[1]/int[@name='id'][.='2']",
         "//result/doc[2]/int[@name='id'][.='1']"
@@ -155,6 +155,10 @@ public class AdvertComponentTest extends AbstractAdvertTestCase {
 	
   @Test
   @SolrTest
+  /**
+   * Test if the kbase parameter is taken into account
+   * @throws Exception
+   */
 	public void testTwoDifferentSessions() throws Exception {
     assertAddDoc("1", "tennis racquet", "babolat", "", new Date(), 150.0);
     assertAddDoc("2", "tennis racquet", "prince", "", new Date(), 100.0);
@@ -178,7 +182,7 @@ public class AdvertComponentTest extends AbstractAdvertTestCase {
             "q","\"tennis racquet\"", 
             "qt", "requestHandlerWithAdvert",
             AdvertParams.ADVERT_COMPONENT_NAME, "true",
-            AdvertParams.ADVERT_RULES, "ksession1"),
+            AdvertParams.ADVERT_RULES, "kbase1"),
         "//*[@numFound='3']",
         "//result/doc[1]/int[@name='id'][.='2']",
         "//result/doc[2]/int[@name='id'][.='1']",
@@ -191,7 +195,7 @@ public class AdvertComponentTest extends AbstractAdvertTestCase {
             "q","\"tennis racquet\"", 
             "qt", "requestHandlerWithAdvert",
             AdvertParams.ADVERT_COMPONENT_NAME, "true", 
-            AdvertParams.ADVERT_RULES, "ksession3"),
+            AdvertParams.ADVERT_RULES, "kbase3"),
         "//*[@numFound='3']",
         "//result/doc[1]/int[@name='id'][.='3']",
         "//result/doc[2]/int[@name='id'][.='1']",
@@ -291,7 +295,7 @@ public class AdvertComponentTest extends AbstractAdvertTestCase {
             "q", "\"tennis racquet\"", 
             "qt", "requestHandlerWithAdvert", 
             AdvertParams.ADVERT_COMPONENT_NAME, "true",
-            AdvertParams.ADVERT_RULES, "sessionFromAnotherContext"
+            AdvertParams.ADVERT_RULES, "kbase1"
         ),
         "//*[@numFound='3']",
         "//result/doc[1]/int[@name='id'][.='3']",
@@ -337,7 +341,7 @@ public class AdvertComponentTest extends AbstractAdvertTestCase {
             "mm", "1",
             AdvertParams.ADVERT_COMPONENT_NAME, "true",
             AdvertParams.ADVERT_BATCH, "batchTestMoveTermToFilter",
-            AdvertParams.ADVERT_RULES, "ksessionTestMoveTermToFilter"
+            AdvertParams.ADVERT_RULES, "kbaseTestMoveTermToFilter"
         ),
         "//*[@numFound='2']"
     );
@@ -350,7 +354,7 @@ public class AdvertComponentTest extends AbstractAdvertTestCase {
             "mm", "1",
             AdvertParams.ADVERT_COMPONENT_NAME, "true",
             AdvertParams.ADVERT_BATCH, "batchTestMoveTermToFilter",
-            AdvertParams.ADVERT_RULES, "ksessionTestMoveTermToFilter"
+            AdvertParams.ADVERT_RULES, "kbaseTestMoveTermToFilter"
         ),
         "//*[@numFound='1']"
     );

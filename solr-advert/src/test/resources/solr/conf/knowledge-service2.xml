@@ -27,6 +27,4 @@
     </drools:resources>
   </drools:kbase>
   
-  <drools:ksession id="sessionFromAnotherContext" type="stateless" kbase="kbase1"/>
-
 </beans>

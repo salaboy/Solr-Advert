@@ -29,8 +29,14 @@ import org.apache.solr.core.SolrCore;
 import org.apache.solr.handler.component.ResponseBuilder;
 import org.apache.solr.handler.component.SearchComponent;
 import org.apache.solr.util.plugin.SolrCoreAware;
+import org.drools.KnowledgeBase;
+import org.drools.KnowledgeBaseFactory;
+import org.drools.builder.KnowledgeBuilder;
+import org.drools.builder.KnowledgeBuilderFactory;
+import org.drools.builder.ResourceType;
 import org.drools.command.Command;
 import org.drools.command.CommandFactory;
+import org.drools.io.ResourceFactory;
 import org.drools.runtime.StatelessKnowledgeSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -139,7 +145,8 @@ public class AdvertComponent extends SearchComponent implements AdvertParams, So
       }
       
       String rules = params.get(ADVERT_RULES, ADVERT_DEFAULT_RULES);
-      StatelessKnowledgeSession ksession = (StatelessKnowledgeSession)kcontext.getBean(rules);
+      KnowledgeBase kbase = (KnowledgeBase) kcontext.getBean(rules);
+      StatelessKnowledgeSession ksession = kbase.newStatelessKnowledgeSession();
       
       List<Command<?>> cmds = new ArrayList<Command<?>>();
       
