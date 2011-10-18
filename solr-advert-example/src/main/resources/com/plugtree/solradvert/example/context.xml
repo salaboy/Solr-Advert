@@ -18,16 +18,18 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:util="http://www.springframework.org/schema/util"
     xmlns:drools="http://drools.org/schema/drools-spring"
+    xmlns:context="http://www.springframework.org/schema/context"
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
            http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd
+           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
            http://drools.org/schema/drools-spring http://drools.org/schema/drools-spring.xsd">
            
-  <!-- TODO use advert.path property -->
+  <context:property-placeholder/>
 
   <drools:kbase id="exampleKBase">
     <drools:resources>
-      <drools:resource type="DRL" source="file:/home/jgrande/Documents/plugtree/Solr-Advert/solr-advert/src/main/resources/com/plugtree/solradvert/rules/solr-queries.drl"/>
-      <drools:resource type="DRL" source="file:/home/jgrande/Documents/plugtree/Solr-Advert/solr-advert-example/src/main/resources/com/plugtree/solradvert/example/rules.drl"/>
+      <drools:resource type="DRL" source="file:${advert.path}/solr-advert/src/main/resources/com/plugtree/solradvert/rules/solr-queries.drl"/>
+      <drools:resource type="DRL" source="file:${advert.path}/solr-advert-example/src/main/resources/com/plugtree/solradvert/example/rules.drl"/>
     </drools:resources>
   </drools:kbase>
   
